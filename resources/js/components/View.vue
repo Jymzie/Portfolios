@@ -43,9 +43,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="text-align:center">{{ firstFloor }}</td>
-                        <td style="text-align:center">{{ secondFloor }}</td>
-                        <td style="text-align:center">{{ thirdFloor }}</td>
+                        <td style="text-align:center">{{ mCountTotal('1F') }}</td>
+                        <td style="text-align:center">{{ mCountTotal('2F') }}</td>
+                        <td style="text-align:center">{{ mCountTotal('3F') }}</td>
                     </tr>
                 </tbody>
             </v-simple-table>
@@ -95,68 +95,68 @@
                             </td>
 
                             <td @click="openPictureDialog(item, item.no1)" class="viewborder">
-                                <label class="camera-button" v-if="item.no1 == null">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_1')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo )" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" :src="'storage/image/'+item.no1" contain />
+                                <img v-else class="imagefit" :src="'image/'+item.PanelNo+'_1.jpg'" contain />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 2 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 2 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no2 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 1 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 1 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_2')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no2" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_2.jpg'" />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 3 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 3 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no3 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 2 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 2 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_3')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no3" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_3.jpg'" />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 4 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 4 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no4 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 3 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 3 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_4')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no4" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_4.jpg'" />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 5 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 5 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no5 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 4 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 4 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_5')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no5" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_5.jpg'" />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 6 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 6 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no6 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 5 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 5 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_6')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no6" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_6.jpg'" />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 7 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 7 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no7 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 6 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 6 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_7')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no7" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_7.jpg'" />
                             </td>
-                            <td @click="!isMobile && item.count+1 == 8 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="item.count+1 >= 8 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="item.no8 == null">
+                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 7 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 7 ? '':'background-color:grey'">
+                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_8')">
                                     <v-icon x-large>mdi-camera</v-icon>
                                     <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
                                 </label>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'storage/image/'+item.no8" />
+                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_8.jpg'" />
                             </td>
 
                         </tr>
@@ -234,7 +234,7 @@
         <div>
             <span>This function represents the camera capture function of the (Nail Pitch System) which can take pictures and store it locally or through the server.</span>
             <br>
-            <span class="red--text">Note: This program is statistically modified and limited, API functions are restricted!</span>
+            <span class="red--text">Note: This program has been modified, some function may not work!</span>
         </div>
     </v-footer>
     <CameraVue :OpenCam="OpenCam" :currentPanelNo="currentPanelNo" :editHeader="processItem" @closecam="OpenCam = false" />
@@ -242,7 +242,9 @@
 </template>
 
 <script>
+import axios from 'axios';
 import CameraVue from './Camera.vue'
+import { pickBy } from 'lodash';
 
 export default {
     components: {
@@ -251,7 +253,7 @@ export default {
     data: () => ({
     menuLeft: 'mdi-menu-left',
         show: false,
-        processItem: {CDNO:'F05U204-2401', HCODE:'AZ877', REQUEST: '41-24', DESTINATION:'TOYAMA'},
+        processItem: {CDNO:'TEST204-CDNO', HCODE:'HCTEST', REQUEST: '41-24', DESTINATION:'N/A'},
         trimYear: '',
         tableContent: [{PanelNo:'1F-001'},{PanelNo:'1F-002'},{PanelNo:'1F-003'},{PanelNo:'2F-001'},],
         overdata: '',
@@ -263,10 +265,13 @@ export default {
         pictureDialog:false,
         isMobile: false,
         OpenCam: false,
-        currentPanelNo: '1F-001'
+        currentPanelNo: '1F-001',
+        picfiles: []
+
 
     }),
     created() {
+        this.mGet()
         this.trimYear = 2024
         // this.getPanelNo()
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -277,6 +282,27 @@ export default {
 
     },
     methods: {
+        mCountTotal(val){
+            return this.picfiles.filter(rec => rec.includes(val)).length
+        },
+        mPicCount(val){
+            return this.picfiles.filter(rec => rec.includes(val)).length
+        },
+        mPicExist(val){
+            if(this.picfiles.filter(rec => rec == val).length){
+                return false
+            }
+            
+            else
+                return true
+            
+        },
+        mGet(){
+            axios.get(`api/camera`)
+            .then(res => {
+                this.picfiles = res.data
+            })
+        },
         openPictureDialog( item, val){
             console.log(item, 'item');
 

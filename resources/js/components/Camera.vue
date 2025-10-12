@@ -154,6 +154,7 @@ export default {
                 let paramsObj = {};
                 paramsObj.title = this.currentPanelNo
                 paramsObj.path = "image"
+                paramsObj.isretake = 0
                 const file = new File([blob], this.imageName + '.jpg');
                 const formData = new FormData();
                 formData.append("file", file);
@@ -176,7 +177,7 @@ export default {
                         this.$router.push("/error/" + response.status);
                     });
             });
-            this.$store.commit('setItem', this.editHeader)
+            // this.$store.commit('setItem', this.editHeader)
             this.$router.push('/view');
             location.reload()
         },

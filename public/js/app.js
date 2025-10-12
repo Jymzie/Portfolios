@@ -1249,15 +1249,15 @@ var render = function () {
                   _c("tbody", [
                     _c("tr", [
                       _c("td", { staticStyle: { "text-align": "center" } }, [
-                        _vm._v(_vm._s(_vm.firstFloor)),
+                        _vm._v(_vm._s(_vm.mCountTotal("1F"))),
                       ]),
                       _vm._v(" "),
                       _c("td", { staticStyle: { "text-align": "center" } }, [
-                        _vm._v(_vm._s(_vm.secondFloor)),
+                        _vm._v(_vm._s(_vm.mCountTotal("2F"))),
                       ]),
                       _vm._v(" "),
                       _c("td", { staticStyle: { "text-align": "center" } }, [
-                        _vm._v(_vm._s(_vm.thirdFloor)),
+                        _vm._v(_vm._s(_vm.mCountTotal("3F"))),
                       ]),
                     ]),
                   ]),
@@ -1404,7 +1404,7 @@ var render = function () {
                                 },
                               },
                               [
-                                item.no1 == null
+                                _vm.mPicExist(item.PanelNo + "_1")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1443,7 +1443,7 @@ var render = function () {
                                   : _c("img", {
                                       staticClass: "imagefit",
                                       attrs: {
-                                        src: "storage/image/" + item.no1,
+                                        src: "image/" + item.PanelNo + "_1.jpg",
                                         contain: "",
                                       },
                                     }),
@@ -1455,19 +1455,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 2
+                                  _vm.mPicCount(item.PanelNo) >= 1
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 2
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 1
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no2 == null
+                                _vm.mPicExist(item.PanelNo + "_2")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1508,7 +1509,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no2,
+                                        src: "image/" + item.PanelNo + "_2.jpg",
                                       },
                                     }),
                               ]
@@ -1519,19 +1520,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 3
+                                  _vm.mPicCount(item.PanelNo) >= 2
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 3
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 2
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no3 == null
+                                _vm.mPicExist(item.PanelNo + "_3")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1572,7 +1574,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no3,
+                                        src: "image/" + item.PanelNo + "_3.jpg",
                                       },
                                     }),
                               ]
@@ -1583,19 +1585,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 4
+                                  _vm.mPicCount(item.PanelNo) >= 3
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 4
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 3
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no4 == null
+                                _vm.mPicExist(item.PanelNo + "_4")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1636,7 +1639,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no4,
+                                        src: "image/" + item.PanelNo + "_4.jpg",
                                       },
                                     }),
                               ]
@@ -1647,19 +1650,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 5
+                                  _vm.mPicCount(item.PanelNo) >= 4
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 5
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 4
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no5 == null
+                                _vm.mPicExist(item.PanelNo + "_5")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1700,7 +1704,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no5,
+                                        src: "image/" + item.PanelNo + "_5.jpg",
                                       },
                                     }),
                               ]
@@ -1711,19 +1715,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 6
+                                  _vm.mPicCount(item.PanelNo) >= 5
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 6
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 5
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no6 == null
+                                _vm.mPicExist(item.PanelNo + "_6")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1764,7 +1769,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no6,
+                                        src: "image/" + item.PanelNo + "_6.jpg",
                                       },
                                     }),
                               ]
@@ -1775,19 +1780,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 7
+                                  _vm.mPicCount(item.PanelNo) >= 6
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 7
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 6
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no7 == null
+                                _vm.mPicExist(item.PanelNo + "_7")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1828,7 +1834,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no7,
+                                        src: "image/" + item.PanelNo + "_7.jpg",
                                       },
                                     }),
                               ]
@@ -1839,19 +1845,20 @@ var render = function () {
                               {
                                 staticClass: "viewborder",
                                 style:
-                                  item.count + 1 >= 8
+                                  _vm.mPicCount(item.PanelNo) >= 7
                                     ? ""
                                     : "background-color:grey",
                                 on: {
                                   click: function ($event) {
-                                    !_vm.isMobile && item.count + 1 == 8
+                                    !_vm.isMobile &&
+                                    _vm.mPicCount(item.PanelNo) >= 7
                                       ? _vm.OpeningCam(item.PanelNo)
                                       : ""
                                   },
                                 },
                               },
                               [
-                                item.no8 == null
+                                _vm.mPicExist(item.PanelNo + "_8")
                                   ? _c(
                                       "label",
                                       { staticClass: "camera-button" },
@@ -1892,7 +1899,7 @@ var render = function () {
                                       attrs: {
                                         height: "100",
                                         width: "150",
-                                        src: "storage/image/" + item.no8,
+                                        src: "image/" + item.PanelNo + "_8.jpg",
                                       },
                                     }),
                               ]
@@ -2211,7 +2218,7 @@ var render = function () {
           _vm._v(" "),
           _c("span", { staticClass: "red--text" }, [
             _vm._v(
-              "Note: This program is statistically modified and limited, API functions are restricted!"
+              "Note: This program has been modified, some function may not work!"
             ),
           ]),
         ]),
@@ -67903,6 +67910,7 @@ __webpack_require__.r(__webpack_exports__);
         var paramsObj = {};
         paramsObj.title = _this2.currentPanelNo;
         paramsObj.path = "image";
+        paramsObj.isretake = 0;
         var file = new File([blob], _this2.imageName + '.jpg');
         var formData = new FormData();
         formData.append("file", file);
@@ -67921,7 +67929,7 @@ __webpack_require__.r(__webpack_exports__);
           _this2.$router.push("/error/" + response.status);
         });
       });
-      this.$store.commit('setItem', this.editHeader);
+      // this.$store.commit('setItem', this.editHeader)
       this.$router.push('/view');
       location.reload();
     },
@@ -67990,7 +67998,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Camera_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Camera.vue */ "./resources/js/components/Camera.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Camera_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Camera.vue */ "./resources/js/components/Camera.vue");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -68234,21 +68246,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    CameraVue: _Camera_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    CameraVue: _Camera_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
       menuLeft: 'mdi-menu-left',
       show: false,
       processItem: {
-        CDNO: 'F05U204-2401',
-        HCODE: 'AZ877',
+        CDNO: 'TEST204-CDNO',
+        HCODE: 'HCTEST',
         REQUEST: '41-24',
-        DESTINATION: 'TOYAMA'
+        DESTINATION: 'N/A'
       },
       trimYear: '',
       tableContent: [{
@@ -68269,10 +68283,12 @@ __webpack_require__.r(__webpack_exports__);
       pictureDialog: false,
       isMobile: false,
       OpenCam: false,
-      currentPanelNo: '1F-001'
+      currentPanelNo: '1F-001',
+      picfiles: []
     };
   },
   created: function created() {
+    this.mGet();
     this.trimYear = 2024;
     // this.getPanelNo()
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -68281,6 +68297,29 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {},
   methods: {
+    mCountTotal: function mCountTotal(val) {
+      return this.picfiles.filter(function (rec) {
+        return rec.includes(val);
+      }).length;
+    },
+    mPicCount: function mPicCount(val) {
+      return this.picfiles.filter(function (rec) {
+        return rec.includes(val);
+      }).length;
+    },
+    mPicExist: function mPicExist(val) {
+      if (this.picfiles.filter(function (rec) {
+        return rec == val;
+      }).length) {
+        return false;
+      } else return true;
+    },
+    mGet: function mGet() {
+      var _this = this;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/camera").then(function (res) {
+        _this.picfiles = res.data;
+      });
+    },
     openPictureDialog: function openPictureDialog(item, val) {
       console.log(item, 'item');
       if (item.no1 == null) {
@@ -68296,16 +68335,16 @@ __webpack_require__.r(__webpack_exports__);
       this.currentPanelNo = item;
     },
     savePicture: function savePicture(item) {
-      var _this = this;
+      var _this2 = this;
       var paramsObj = {};
       paramsObj.title = item;
       paramsObj.path = "image";
       var formData = new FormData();
       formData.append("file", this.captured);
       formData.append("params", JSON.stringify(paramsObj));
-      axios.post("api/camera", formData).then(function (res) {})["catch"](function (_ref) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("api/camera", formData).then(function (res) {})["catch"](function (_ref) {
         var response = _ref.response;
-        _this.$router.push("/error/" + response.status);
+        _this2.$router.push("/error/" + response.status);
       });
       location.reload();
     },
@@ -68342,13 +68381,13 @@ __webpack_require__.r(__webpack_exports__);
       // console.log(firstCount, 'count');
     },
     getPanelNo: function getPanelNo() {
-      var _this2 = this;
+      var _this3 = this;
       var Request = this.processItem.RequestWeek + '-' + this.processItem.RequestYear;
-      axios.get("api/view?request=".concat(Request, "&&cdno=").concat(this.processItem.ConstructionCode, "&&hcode=").concat(this.processItem.NameCode)).then(function (res) {
-        _this2.tableContent = res.data;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/view?request=".concat(Request, "&&cdno=").concat(this.processItem.ConstructionCode, "&&hcode=").concat(this.processItem.NameCode)).then(function (res) {
+        _this3.tableContent = res.data;
         // this.$store.commit('setEditView', res.data)
-        _this2.floorConputation();
-        console.log(_this2.tableContent);
+        _this3.floorConputation();
+        console.log(_this3.tableContent);
       });
     }
   }
