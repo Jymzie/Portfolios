@@ -68284,7 +68284,8 @@ __webpack_require__.r(__webpack_exports__);
       isMobile: false,
       OpenCam: false,
       currentPanelNo: '1F-001',
-      picfiles: []
+      picfiles: [],
+      captured: null
     };
   },
   created: function created() {
@@ -68338,6 +68339,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
       var paramsObj = {};
       paramsObj.title = item;
+      paramsObj.isretake = 0;
       paramsObj.path = "image";
       var formData = new FormData();
       formData.append("file", this.captured);

@@ -266,7 +266,8 @@ export default {
         isMobile: false,
         OpenCam: false,
         currentPanelNo: '1F-001',
-        picfiles: []
+        picfiles: [],
+        captured:null
 
 
     }),
@@ -324,6 +325,7 @@ export default {
         savePicture(item) {
             let paramsObj = {};
             paramsObj.title = item
+            paramsObj.isretake = 0
             paramsObj.path = "image"
             const formData = new FormData();
             formData.append("file", this.captured);
