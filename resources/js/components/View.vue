@@ -338,7 +338,7 @@ export default {
                 }) => {
                     this.$router.push("/error/" + response.status);
                 });
-            this.mGet()
+            location.reload()
 
         },
         createPDF() {

@@ -68348,7 +68348,7 @@ __webpack_require__.r(__webpack_exports__);
         var response = _ref.response;
         _this2.$router.push("/error/" + response.status);
       });
-      this.mGet();
+      location.reload();
     },
     createPDF: function createPDF() {
       return alert('This button is not yet functional');
