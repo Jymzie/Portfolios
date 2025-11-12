@@ -5,7 +5,7 @@
  app
  >
  <v-list dense>
- <v-subheader>LIST COMPONENTS:</v-subheader>
+ <v-subheader>SYSTEM PREVIEWS:</v-subheader>
  <v-list-item
  v-for="(item, i) in items"
  :key="i"
@@ -20,7 +20,7 @@
  </v-list-item>
  </v-list>
  </v-navigation-drawer>
- <v-app-bar app>
+ <v-app-bar app  style="z-index: 99;">
  <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
  <v-toolbar-title>Portfolios</v-toolbar-title>
  </v-app-bar>

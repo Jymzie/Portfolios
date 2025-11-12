@@ -1,89 +1,69 @@
 <template>
 <v-container fluid>
     <v-row dense>
-        <v-col cols="3" class="text-left">
-            <div>
-
-                <v-simple-table dense>
-                    <thead>
-                        <tr>
-                            <th class="table1-th">CDNO</th>
-                            <td style="font-weight: bold;  ">{{ processItem.CDNO }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table1-th">HCODE</th>
-                            <td style="font-weight: bold;">{{processItem.HCODE }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table1-th">REQUEST</th>
-                            <td style="font-weight: bold;">{{processItem.REQUEST}}-{{trimYear }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table1-th">DESTINATION</th>
-                            <td style="font-weight: bold;">{{processItem.DESTINATION}}</td>
-                        </tr>
-                    </thead>
-                </v-simple-table>
+        <v-col cols="4" lg="4" md="5" sm="6" class="text-left">
+            <div class="my-n5">
 
             </div>
         </v-col>
-        <v-col cols="5"></v-col>
-        <v-col cols="4" class="text-rigth">
-            <v-simple-table style="border: 1px block;" dense>
+        <v-col cols="4" lg="4" md="1" v-if="!$vuetify.breakpoint.smOnly"></v-col>
+        <v-col cols="4" lg="4" md="6" sm="6" class="text-rigth">
+            <v-simple-table style="border: 1px block" dense>
                 <thead>
-                    <tr style="background-color:  #3C282F;">
-                        <th colspan="3" style="text-align:center; color: white; font-weight: bold;">TOTAL PANEL</th>
+                    <tr style="background-color: #3c282f">
+                        <th colspan="3" style="text-align: center; color: white; font-weight: bold">
+                            TOTAL SAMPLE
+                        </th>
                     </tr>
-                    <tr style="background-color:  #3C282F; ">
-                        <th style="text-align:center; color: white;">1F</th>
-                        <th style="text-align:center; color: white;">2F</th>
-                        <th style="text-align:center; color: white;">3F</th>
-
+                    <tr style="background-color: #3c282f">
+                        <th style="text-align: center; color: white">1</th>
+                        <th style="text-align: center; color: white">2</th>
+                        <th style="text-align: center; color: white">3</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="text-align:center">{{ mCountTotal('1F') }}</td>
-                        <td style="text-align:center">{{ mCountTotal('2F') }}</td>
-                        <td style="text-align:center">{{ mCountTotal('3F') }}</td>
+                        <td style="text-align: center">{{ firstFloor }}</td>
+                        <td style="text-align: center">{{ secondFloor }}</td>
+                        <td style="text-align: center">{{ thirdFloor }}</td>
                     </tr>
                 </tbody>
             </v-simple-table>
             <template>
                 <div>
                     <div class="table1-th">
-                        SCANNED BY: Jimwell
+                        SCANNED BY: JIMWELL C. PUNZALAN
                     </div>
                 </div>
             </template>
         </v-col>
-
     </v-row>
 
     <v-row>
         <v-col>
-            <v-simple-table :height="$vuetify.breakpoint.height-360+'px'" fixed-header>
+            <v-simple-table :height="$vuetify.breakpoint.height- 290 + 'px'" fixed-header class="my-n3 mt-n5" style="border: 1px solid black">
                 <thead>
                     <tr>
                         <th class="table-header">PANEL NO</th>
-                        <th class="table-header">1</th>
-                        <th class="table-header">2</th>
-                        <th class="table-header">3</th>
-                        <th class="table-header">4</th>
-                        <th class="table-header">5</th>
-                        <th class="table-header">6</th>
-                        <th class="table-header">7</th>
-                        <th class="table-header">8</th>
+                        <th v-for="(counter,l) in picCols" :key="l" class="table-header">{{counter}}</th>
+                        <!-- <th class="table-header">ACTIONS</th> -->
                     </tr>
-
                 </thead>
-                <tbody>
+                <tbody v-if="loadingTable">
+                    <tr>
+                        <td rowspan="4" colspan="9" class="text-center white">
+                            <h3>Loading Images</h3>
+                            <v-progress-circular loadingTable :size="90" :width="20" color="#3c282f" indeterminate></v-progress-circular>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
                     <template>
-                        <tr v-for="(item, i) in tableContent" :key="i" @mouseover="isHoveringRow(i)" @mouseleave="onMouseLeave()">
+                        <tr v-for="(item, i) in tableContent" :key="i" @mouseover="isHoveringRow(i)" @mouseleave="onMouseLeave()" @load="imageExists()">
                             <td class="table-headers">
                                 <v-row>
                                     <v-col cols="3" class="text-left">
-                                        <v-icon v-if="tdIndex == i" v-show="show" style="color: white !important;" medium>
+                                        <v-icon v-if="tdIndex == i" v-show="show" style="color: white !important" medium>
                                             mdi-play
                                         </v-icon>
                                     </v-col>
@@ -91,333 +71,832 @@
                                         {{ item.PanelNo }}
                                     </v-col>
                                 </v-row>
-
                             </td>
 
-                            <td @click="openPictureDialog(item, item.no1)" class="viewborder">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_1')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo )" accept="image/*;capture=camera"></v-file-input>
-                                </label>
+                            <!-- NOTE: picture looping -->
+                            <!-- max: ang pinaka latest na narating nung picture 
+                    count: total na picture na meron
+                    OpeningCam(item, counter, 'Capture')
+              -->
+                            <td v-for="(counter,k) in picCols" :key="k" @click="
+                              item.max >= counter && item['no'+counter] != null
+                              ? openPictureDialog(item, item['no'+counter])
+                                : (item.max >= counter || item.count == counter-1) &&
+                                  item['no'+counter] == null &&
+                                  (item.finishFlag == null || item.finishFlag == 0) &&
+                                  clkpanelact == ''
+                                ? mUploadDialog(item, counter, 'Capture')
+                                : ''
 
-                                <img v-else class="imagefit" :src="'image/'+item.PanelNo+'_1.jpg'" contain />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 1 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 1 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_2')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
+                            " class="viewborder" :style="
+                              item.count+1 >= counter &&
+                              (item.finishFlag == null || item.finishFlag == 0)
+                              ? ''
+                              : 'background-color:grey'
+                            ">
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_2.jpg'" />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 2 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 2 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_3')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
+                                <!-- NOTE: picture loading -->
+                                <v-progress-circular size='30' style="padding: 0;margin: 0;" v-if="isLoadingCell == counter && item.PanelNo == currentPanelNo" color="black" indeterminate></v-progress-circular>
+                                <!-- NOTE: camera logo -->
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_3.jpg'" />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 3 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 3 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_4')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
+                                <v-icon v-else-if="item['no'+counter] == null" x-large>mdi-camera</v-icon>
 
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_4.jpg'" />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 4 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 4 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_5')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
-
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_5.jpg'" />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 5 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 5 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_6')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
-
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_6.jpg'" />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 6 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 6 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_7')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
-
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_7.jpg'" />
-                            </td>
-                            <td @click="!isMobile && mPicCount(item.PanelNo) >= 7 ? OpeningCam(item.PanelNo):''" class="viewborder" :style="mPicCount(item.PanelNo) >= 7 ? '':'background-color:grey'">
-                                <label class="camera-button" v-if="mPicExist(item.PanelNo+'_8')">
-                                    <v-icon x-large>mdi-camera</v-icon>
-                                    <v-file-input v-if="isMobile" v-model="captured" @change="savePicture(item.PanelNo)" accept="image/*;capture=camera"></v-file-input>
-                                </label>
-
-                                <img v-else class="imagefit" height="100" width="150" :src="'image/'+item.PanelNo+'_8.jpg'" />
+                                <!-- NOTE: if theres a picture, show it -->
+                                <img v-else class="imagefit" :src="'images/'+item['no'+counter]+'.jpg'+'?' + paramFunction + ''" contain />
+                                
                             </td>
 
                         </tr>
                     </template>
-
                 </tbody>
             </v-simple-table>
         </v-col>
     </v-row>
     <v-row>
         <v-col cols="6" class="text-left">
-            <v-btn style="background-color:  #3C282F; color: white;" @click=" $router.push('/schedule') ">
-                <v-icon class="ml-n3 mr-5" x-large>mdi-menu-left</v-icon> BACK
-            </v-btn>
+
         </v-col>
         <v-col cols="6" class="text-right">
-            <v-btn @click="createPDF()" style="background-color:  #3C282F;  color: white;">
-                <v-icon class="ml-n3 mr-5">mdi-file-pdf-box</v-icon>CREATE PDF
+
+            <v-btn v-if="!isMobile" @click="(previewdialog = !previewdialog), getPdfUrl('preview')" :disabled="picContent.length == 0"  style="background-color: #3c282f; color: white; font-weight: bold">
+                <v-icon class="ml-n3 mr-5">mdi-file-pdf-box</v-icon>PREVIEW
             </v-btn>
         </v-col>
     </v-row>
 
-    <v-dialog  v-model="pictureDialog" fixed class="dialog">
-        <div   align="center" fixed>
-        <v-card  align="center" style="border-radius: 10px;border: 3px solid black;  position: center; height: 70vh;width: 53vw;" class="dialog" >
-    
-            <v-row>
-                <v-col cols="12" class="text-center" >
-                    <v-icon fab x-large color="red" @click="pictureDialog= false">mdi-close-circle
+    <!--NOTE Dialog for ViewPicture -->
+    <v-dialog v-model="pictureDialog" fixed class="dialog" content-class="elevation-0">
+        <div align="center" fixed>
+            <v-card align="center" :style="
+            isMobile
+              ? 'border-radius: 10px;border: 3px solid black;   width: 80vw;'
+              : 'border-radius: 10px;border: 3px solid black; width: 70vw;'
+          " class="dialog position: center">
+                <v-row dense>
+                    <v-col cols="12" class="text-center">
+                        <v-icon class="mt-2" fab size="60px" color="red" @click="(pictureDialog = false), (pictures = true)">mdi-close-circle
+                        </v-icon>
+                    </v-col>
+                </v-row>
+                <v-row dense>
+                    <v-col cols="12" align="center">
+                        <h1>{{ processItem.NameCode }}</h1>
+                    </v-col>
+                </v-row>
+                <!-- {{ dialogItem }} -->
+
+                <v-row dense>
+                    <v-col cols="1" align="left" style="max-width: 80px; height: 40vh; padding-top: 130px">
+                        <v-icon @click="Previous()" :disabled="dialogItem.PicNO == 1 || loading" style="color: black; cursor: pointer; max-width: 65px; text-align: center" size="100px">mdi-menu-left</v-icon>
+                    </v-col>
+
+                    <v-col v-if="loading">
+                        <v-progress-circular loading :size="90" :width="20" color="#3c282f" indeterminate></v-progress-circular>
+                    </v-col>
+                    <v-col v-else align="center">
+                        <div v-if="pictures">
+
+                            <img :style="
+                    isMobile ? 'height: 40vh; width: 40vw;' : 'height: 50vh; width: 50vw;'
+                  " :src="
+                    'images/'+
+                    dialogItem.PanelNo +
+                    '_' +
+                    viewpageNO +
+                    '.jpg?' +
+                    paramFunction
+                  " />
+                        </div>
+                        <div v-else>
+                            <span style="height: 40vh; width: 40vw">
+                                <h1>No Picture</h1>
+                            </span>
+                            <v-icon style="cursor: pointer" @click="!isMobile ? OpeningCam(dialogItem, viewpageNO, 'Capture') : ''" x-large>mdi-camera</v-icon>
+                        </div>
+                    </v-col>
+
+                    <v-col cols="1" align="right" style="max-width: 80px; height: 40vh; padding-top: 130px">
+                        <v-icon @click="Next()" :disabled="dialogItem.PicNO == 8 || viewpageNO == lastPic || loading" style="color: black; cursor: pointer; max-width: 65px; text-align: center" size="100">mdi-menu-right</v-icon>
+                    </v-col>
+                </v-row>
+
+                <v-row align="center" class="justify-center">
+                    <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
+                        <v-btn @click="OpeningCam(DialogPanelNo+'.jpg', 1, 'Retake')" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures">
+                            RETAKE
+                        </v-btn>
+
+                    </v-col>
+
+                    <!-- Upload Button -->
+                    <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
+                        <v-btn id="fileInputButton" onclick="document.getElementById('rfileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures">
+                            UPLOAD
+                        </v-btn>
+
+                        <input id="rfileInput" type="file" @change="uploadImage($event, 'retake')" style="display:none" accept="image/*" />
+                    </v-col>
+                    <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
+                        <v-btn style="font-weight: bold; background-color: #3c282f; color: white" @click="del(DialogPanelNo)" :disabled="!pictures">ERASE</v-btn>
+                    </v-col>
+                </v-row>
+                <v-row align="center" class="justify-center">
+                    <v-col sm="3" md="3" lg="3" align="center">
+                        <h1>{{ dialogItem.PanelNo }}</h1>
+                    </v-col>
+                    <v-col sm="3" md="3" lg="3" align="center">
+                        <h1>{{ dialogItem.PicNO }}</h1>
+                    </v-col>
+                </v-row>
+            </v-card>
+        </div>
+    </v-dialog>
+
+    <!-- NOTE Dialog for preview -->
+    <v-dialog persistent width="1000" height="600" v-model="previewdialog" :content-class="isLoading ? 'elevation-0' : 'custom-scrollbar-hidden'">
+        <div v-if="isLoading">
+            <v-col cols="12" class="text-subtitle-1 text-center">
+                <h3 class="white--text">Generating PDF <span class="dots"></span></h3>
+            </v-col>
+            <v-col v-if="isLoading" cols="12" class="text-subtitle-1 text-center">
+                <v-progress-circular loading :size="90" :width="20" color="#FFFFFF" indeterminate></v-progress-circular>
+            </v-col>
+        </div>
+
+        <v-card v-else id="create">
+            <v-icon dark fab class="v-btn--floating" style="position: absolute; top: 25px; right: 40px; z-index: 1000" @click="previewdialog = !previewdialog" color="red">mdi-xamarin</v-icon>
+
+            <iframe width="1000" height="600" ref="pdfview" :src="pdfPrint"></iframe>
+            <v-btn color="green" dark fab class="v-btn--floating" style="position: absolute; bottom: 25px; right: 40px; z-index: 1000" @click="getPdfUrl('download')">
+                <v-icon>mdi-download</v-icon>
+            </v-btn>
+        </v-card>
+    </v-dialog>
+    <!-- Jea -->
+    <!-- NOTE: Mobile v-dialog -->
+    <!-- Gives the user an option whether to capture an image or upload -->
+    <v-dialog v-model="mobileDialog" width="400px" height="350px" persistent>
+
+        <v-card align="center" class="pa-3">
+            <v-row dense class="mb-2">
+                <v-col cols="12" class="text-center">
+                    <v-icon class="mt-2" fab size="60px" color="red" @click="(mobileDialog = false), (pictures = true)">mdi-close-circle
                     </v-icon>
                 </v-col>
             </v-row>
-            <v-row>
-                <v-col cols="12" align="center"><h1>DH234</h1></v-col>
-            </v-row>
 
-           
-            <v-row dense>
-                <v-col style=" margin:0 !important;padding-top:40px;  max-width: 80px;">
-                    <div>
-                     <v-icon color="black"  style=" max-width: 65px; margin: 0px;padding-top:40px  " size="150px" >mdi-menu-left</v-icon>
-                    </div>
-               </v-col>
-               <v-col align="center">
-                     <div  >
-                     <img  style="height: 40vh;width: 40vw;"  :src="'storage/image/'+currentPanelNo"  />
-                    </div>
-               </v-col>
-               <v-col style="margin:0 !important;padding-top:40px; max-width: 80px;" >
-                    <div>
-                     <v-icon  color="black" style="max-width: 65px;margin: 0px;padding-top:40px ;  " size="150px"  >mdi-menu-right</v-icon>
-                    </div>
-                </v-col>
-            </v-row>
+            <v-btn v-if="(param && param.length > 0)" x-large color="primary" width="150px" height="60px" elevation="2" depressed @click="OpeningCam(param[0],param[1],param[2])">
+                <!-- id="fileInputButton" onclick="document.getElementById('filecapture').click()"  -->
+                <v-icon>mdi-camera</v-icon>
+                Capture
+            </v-btn>
+            <!-- <input 
+            id="filecapture" 
+            type="file" 
+            @change="uploadImage"
+            style="display:none"
+            accept="image/*"
+            capture="true"
 
-            <v-row align="center" justify="center">
-                <v-col  align="right">
-                    <v-btn color="green" density="comfortable" left rounded @click="OpeningCam(currentPanelNo)">Replace</v-btn>
-                </v-col>
-                <v-col  align="center">
-                    <h1>1F-001</h1>
-                </v-col>
-                <v-col  align="center">
-                    <h1>1</h1>
-                </v-col>
-                <v-col  align="left">
-                    <v-btn color="red" density="comfortable" right rounded @click="deleteImage()">Erase</v-btn>
-                </v-col>                  
-                </v-row>
-         
-            </v-card>  
-         </div>
+          /> -->
+            <!-- v-if="isMobile" -->
+            <v-btn color="primary" width="150px" height="60px" elevation="2" depressed id="fileInputButton" onclick="document.getElementById('fileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" left>
+                <v-icon>mdi-upload</v-icon>
+                Upload
+            </v-btn>
+
+            <input id="fileInput" type="file" @change="uploadImage" style="display:none" accept="image/*" />
+
+        </v-card>
     </v-dialog>
-     <v-footer color="titlecolor" dark fixed>
-        <div>
-            <span>This function represents the camera capture function of the (Nail Pitch System) which can take pictures and store it locally or through the server.</span>
-            <br>
-            <span class="red--text">Note: This program has been modified, some function may not work!</span>
-        </div>
-    </v-footer>
-    <CameraVue :OpenCam="OpenCam" :currentPanelNo="currentPanelNo" :editHeader="processItem" @closecam="OpenCam = false" />
+    <CameraVue :OpenCam="OpenCam" :imagePath="imagepath2" :currentPanelNo="currentPanelNo" :editHeader="processItem" :isretake="isretake" @closecam="
+        OpenCam = 0;
+        pdfPrint = '';
+      " @loadsave="mLoadSave" @gettable="getPanelNo" />
 </v-container>
 </template>
 
 <script>
-import axios from 'axios';
-import CameraVue from './Camera.vue'
-import { pickBy } from 'lodash';
+import axios from "axios";
+import CameraVue from "./Camera.vue";
 
 export default {
     components: {
-        CameraVue
+        CameraVue,
     },
+    // ANCHOR: DATA
     data: () => ({
-    menuLeft: 'mdi-menu-left',
+        // NOTE: Looping of picture column 
+        picCols: [1, 2, 3, 4, 5, 6, 7, 8],
+        clkpanelact: "",
+        pdfPrint: "",
+        isLoading: false,
+        fab: false,
+        hidden: false,
+        tabs: null,
+        pdfUrl: null,
+        loadingPdfUrl: false,
+        menuLeft: "mdi-menu-left",
         show: false,
-        processItem: {CDNO:'TEST204-CDNO', HCODE:'HCTEST', REQUEST: '41-24', DESTINATION:'N/A'},
-        trimYear: '',
-        tableContent: [{PanelNo:'1F-001'},{PanelNo:'1F-002'},{PanelNo:'1F-003'},{PanelNo:'2F-001'},],
-        overdata: '',
-        currentHoveredRow: null,
+        previewdialog: false,
+        processItem: {},
+        tableContent: [{
+                PanelNo: "1SAMP1",
+                count: 0,
+                max: 0
+            },
+            {
+                PanelNo: "1SAMP2",
+                count: 0,
+                max: 0
+            },
+            {
+                PanelNo: "2SAMP1",
+                count: 0,
+                max: 0
+            },
+            {
+                PanelNo: "2SAMP2",
+                count: 0,
+                max: 0
+            },
+            {
+                PanelNo: "3SAMP1",
+                count: 0,
+                max: 0
+            },
+        ],
+        picContent: [],
         tdIndex: null,
         firstFloor: 0,
         secondFloor: 0,
         thirdFloor: 0,
-        pictureDialog:false,
+        pictureDialog: false,
         isMobile: false,
-        OpenCam: false,
-        currentPanelNo: '1F-001',
-        picfiles: [],
-        captured:null
-
-
+        OpenCam: 0,
+        currentPanelNo: "",
+        DialogPanelNo: "",
+        dialogItem: "",
+        page: 1,
+        isretake: true,
+        image_url: "",
+        pictures: true,
+        loading: false,
+        loadingTable: false,
+        param: [],
+        mobileDialog: false,
+        notificationSystem: {
+            options: {
+                toastpositions: {
+                    position: "bottomRight",
+                    timeout: 1200,
+                    displayMode: 2,
+                },
+                toastpositionsOnly: {
+                    position: "bottomRight",
+                    displayMode: 2,
+                },
+            },
+        },
+        resultNotExist: [],
+        resultNotExist: [],
+        lastPic: 0,
+        captured: null,
+        imagepath: "",
+        imagepath2: "",
+        pdfexist: false,
+        totalfinish: 0,
+        isLoadingCell: 0,
+        curPic: '',
+        iscreate: {
+            overlay: true,
+            toastOnce: true,
+            id: "question",
+            zindex: 999,
+            position: "center",
+            buttons: [
+                [
+                    "<button><b>YES</b></button>",
+                    (instance, toast) => {
+                        instance.hide({
+                                transitionOut: "fadeOut",
+                            },
+                            toast,
+                            "button"
+                        );
+                        this.toswaprotate.kind = "swap";
+                        this.ismenuSwapRotate = !this.ismenuSwapRotate;
+                        this.searchTable = "";
+                    },
+                    true,
+                ],
+                [
+                    "<button>NO</button>",
+                    function (instance, toast) {
+                        instance.hide({
+                                transitionOut: "fadeOut",
+                            },
+                            toast,
+                            "button"
+                        );
+                    },
+                    false,
+                ],
+            ],
+        },
     }),
     created() {
-        this.mGet()
-        this.trimYear = 2024
-        // this.getPanelNo()
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            this.isMobile = true
-        }
+       
+        this.getPanelNo();
+    
     },
+
     computed: {
 
+        paramFunction() {
+            const currentDate = new Date();
+            return currentDate;
+        },
+        viewpageNO() {
+            return this.dialogItem.PicNO;
+        },
     },
+
     methods: {
-        mCountTotal(val){
-            return this.picfiles.filter(rec => rec.includes(val)).length
+        mLoadSave(item) {
+            this.currentPanelNo = item.slice(0, 6);
+            this.isLoadingCell = item[7];
+
         },
-        mPicCount(val){
-            return this.picfiles.filter(rec => rec.includes(val)).length
-        },
-        mPicExist(val){
-            if(this.picfiles.filter(rec => rec == val).length){
-                return false
+
+        getPdfUrl(id) {
+            let url;
+            if (id == "preview") {
+                if (this.pdfPrint == "") {
+                    this.isLoading = true;
+                  
+                    url = `api/camera/${id}?data=${JSON.stringify(this.tableContent)}`;
+                    axios
+                        .get(url, {
+                            responseType: "blob"
+                        })
+                        .then((res) => {
+                            this.pdfPrint =
+                                URL.createObjectURL(res.data) + "#toolbar=0&#navpanes=0&scrollbar=0";
+                        })
+                        .finally(() => (this.isLoading = false));
+                }
+            } else {
+                const link = document.createElement("a");
+                link.href = this.pdfPrint;
+                link.setAttribute("download", 'Sample');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
             }
-            
-            else
-                return true
-            
         },
-        mGet(){
-            axios.get(`api/camera`)
-            .then(res => {
-                this.picfiles = res.data
-            })
-        },
-        openPictureDialog( item, val){
-            console.log(item, 'item');
 
-            if(item.no1 == null){
-                !this.isMobile ? this.OpeningCam(item.PanelNo) : '';
-            }else{
+       
 
-            this.pictureDialog= true;
-            this.currentPanelNo = val
-            console.log(this.currentPanelNo);
+        Previous() {
+            this.loading = true;
+
+            for (let x = (Number(this.dialogItem.PicNO) - 1); x >= 1; x--) {
+                if (this.dialogItem['no' + x]) {
+                    this.pictures = true;
+                    this.dialogItem.PicNO = x
+                    break
+                }
+
             }
+
+            this.loading = false;
+
         },
 
-        OpeningCam(item) {
-          
-            this.OpenCam = true
-            this.currentPanelNo = item
+        Next() {
+            this.loading = true;
+
+            for (let x = (Number(this.dialogItem.PicNO) + 1); x <= this.dialogItem.max; x++) {
+                if (this.dialogItem['no' + x]) {
+                    this.pictures = true;
+                    this.dialogItem.PicNO = x
+                    break
+                }
+
+            }
+
+            this.loading = false;
+
         },
-        savePicture(item) {
+        del(item) {
+            axios
+                .delete(
+                    `api/camera/${item}`
+                )
+                .then((res) => {
+                    if (res.data == 1) {
+                        this.pdfPrint = "";
+                        this.pictureDialog = false;
+                        this.$toast.success(
+                            item + " " + "has been deleted",
+                            "Success: ",
+                            this.notificationSystem.options.toastpositions
+                        );
+                        this.getPanelNo()
+                    } else {
+                        this.$toast.warning(
+                            item + "" + "Failed to Delete",
+                            "Warning",
+                            this.notificationSystem.options.toastpositions
+                        );
+                    }
+                })
+                .finally(() => location.reload());
+        },
+        // NOTE: upload method
+        mUploadDialog(item, val, condition) {
+            this.currentPanelNo = item.PanelNo;
+            // console.log('item', item);
+
+            if (condition == "Capture") {
+                this.mobileDialog = true;
+                this.isretake = false;
+                this.param = [(item), val, condition];
+                this.pictureDialog = false;
+
+            } else if (condition == "Retake") {
+                this.OpeningCam(item, val, condition);
+            }
+
+        },
+        // NOTE Upload Image
+        uploadImage(event, val) {
+            // console.log('here', this.param[1]);
+            this.isLoading = true;
+
+            let picNum = '';
+            let titles = '';
+            // for capture
+            // gets the currentPanelno and pic no as the file name of the image to download
+            if (val == undefined) {
+                picNum = this.param[1];
+                titles = this.currentPanelNo + "_" + picNum + ".jpg";
+                this.isretake = false;
+
+            }
+            // for Retake/reupload of image
+            else {
+                titles = this.dialogItem.PanelNo + "_" + this.dialogItem.PicNO + ".jpg";
+                this.isretake = true;
+
+            }
+            console.log(this.isretake, 'and', val);
+            const file = event.target.files[0];
+
             let paramsObj = {};
-            paramsObj.title = item
-            paramsObj.isretake = 0
-            paramsObj.path = "image"
+            paramsObj.title = titles;
+            paramsObj.path = this.imagepath2;
+            paramsObj.isretake = this.isretake;
+            paramsObj.count = 1;
             const formData = new FormData();
-            formData.append("file", this.captured);
+            formData.append("file0", file);
             formData.append("params", JSON.stringify(paramsObj));
 
-            axios.post(`api/camera`, formData)
-                .then((res) => {})
+            axios({
+                    method: "POST",
+                    url: `api/camera`,
+                    data: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((res) => {
+
+                    if (res.data == 1) {
+                        this.$swal
+                            .fire({
+                                title: "Image successfully saved",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1000,
+                            })
+                            .then(() => {
+                                // Only enables the loading for the selected Panel and Picno
+                                this.isLoadingCell = val !== undefined ? this.dialogItem.PicNO : this.param[1];
+                                // console.log('panel', this.currentPanelNo)
+                                this.mobileDialog = false;
+                                this.pictureDialog = false;
+                                this.isLoading = false;
+                            })
+                            .finally(() => {
+                                if (this.isretake) location.reload();
+                                else this.getPanelNo();
+                            });
+                    } else {
+                        this.$swal.fire({
+                            title: "Failed to save image",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                    }
+
+                    // this.stopCameraStream();
+                })
                 .catch(({
                     response
                 }) => {
-                    this.$router.push("/error/" + response.status);
-                });
-            location.reload()
+                    this.$swal.fire({
+                        title: "Failed to save image",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    });
+                })
+                .finally(() => {
+                    this.isLoadingCell = 0;
+                    // download captured image to the user's tablet
+                    // use as a backup
 
+                });
         },
-        createPDF() {
-            return alert('This button is not yet functional')
+        stopCameraStream() {
+            this.closeCam();
+            let tracks = this.$refs.camera.srcObject.getTracks();
+            tracks.forEach((track) => {
+                track.stop();
+            });
         },
+        closeCam() {
+            this.$emit("closecam");
+        },
+        openPictureDialog(item, val) {
+            let str = val[7];
+            this.dialogItem = {
+                PicNO: str,
+                ...item
+            };
+            // console.log(this.dialogItem, 'fafwfawfa')
+            this.pictures = true;
+            this.pictureDialog = true;
+            this.DialogPanelNo = val;
+            this.lastPic = item.max;
+        },
+        // NOTE: Opening Cam
+
+        OpeningCam(item, val, condition) {
+            // console.log(item, val, condition, 'test');
+            if (val) {
+                this.processItem.curPicNo = val;
+                // console.log('this', this.processItem.curPicNo);
+                if (condition == "Capture") {
+                    //OpenCam is previously a boolean
+                    this.OpenCam = item.count + 1;
+
+                    this.currentPanelNo = item.PanelNo + "_" + val + ".jpg";
+                    this.curPic = val;
+                    this.isretake = false;
+                } else if (condition == "Retake") {
+                    this.isretake = true;
+                    this.currentPanelNo = item;
+                    this.OpenCam = 1;
+                }
+            } else {
+                this.OpenCam = item.count;
+                this.currentPanelNo = item;
+            }
+        },
+        // NOTE: Save Picture
+
+        savePicture(item, val, condition) {
+            // console.log('this', item);
+            if (condition == "Retake") {
+                this.isretake = true;
+            } else {
+                this.isretake = false;
+
+            }
+            let paramsObj = {};
+            paramsObj.title = item;
+            paramsObj.path = this.imagepath2;
+            paramsObj.isretake = this.isretake;
+            paramsObj.count = 1;
+            const formData = new FormData();
+            formData.append("file0", this.captured);
+            formData.append("params", JSON.stringify(paramsObj));
+
+            const url = window.URL.createObjectURL(new Blob([this.captured]))
+            const link = document.createElement("a");
+            link.href = url
+            link.setAttribute("download", 'WEEK' + this.processItem.RequestWeek + '_' + this.processItem.NameCode + '_' + item)
+            document.body.appendChild(link)
+            link.click();
+            link.remove();
+
+            axios
+                .post(`api/camera`, formData)
+                .then((res) => {
+                    this.currentPanelNo = val.PanelNo;
+                    this.isLoadingCell = item[7];
+                    if (res.data == 1) {
+
+                        if (this.isretake) {
+                            this.$swal
+                                .fire({
+                                    title: "Image successfully saved",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                })
+                                .then(() => {
+
+                                    this.pdfPrint = "";
+
+                                    // reload the page if the process is retake
+                                    // Else :call the getPanelNo so that the page wont reload and the user stays to 
+                                    // the current panel no that they are processing
+                                    location.reload();
+
+                                });
+                        } else {
+                            this.$swal
+                                .fire({
+                                    title: "Image successfully saved",
+                                    icon: "success",
+                                    showDenyButton: true,
+                                    confirmButtonText: "Done",
+                                    denyButtonText: `Next`
+                                })
+                                .then((result) => {
+                                    if (result.isConfirmed) {
+                                        this.pdfPrint = "";
+
+                                        this.getPanelNo();
+                                    } else {
+                                        const fileInput = this.$refs.file5;
+                                        // console.log(fileInput)
+                                        if (fileInput) {
+                                            fileInput.click();
+                                        }
+                                    }
+
+                                });
+                        }
+
+                    } else {
+                        this.$swal.fire({
+                            title: "Failed to save image",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                    }
+                })
+                .catch(({
+                    response
+                }) => {
+                    this.$swal.fire({
+                        title: "Failed to save image",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    });
+                })
+            // .finally(()=>{
+            // this.isLoadingCell = 0;
+            //   const url = window.URL.createObjectURL(new Blob([this.captured]))
+            //   const link = document.createElement("a");
+            //   link.href = url
+            //   link.setAttribute("download", 'WEEK'+this.processItem.RequestWeek+'_'+this.processItem.NameCode+'_'+titles)
+            //   document.body.appendChild(link)
+            //   link.click();
+            //   link.remove();
+
+            // });
+        },
+
         showf(i) {
             if (i == this.tdIndex) {
                 this.show = true;
             } else {
-                this.show = false
+                this.show = false;
             }
         },
         isHoveringRow(index) {
-            this.tdIndex = index
-            this.showf(index)
+            this.tdIndex = index;
+            this.showf(index);
         },
         onMouseLeave() {
-            this.show = false
+            this.show = false;
         },
-
-        floorConputation() {
-            let firstCount = this.tableContent.filter(res => {
-                return res.PanelNo.toUpperCase().includes('1F')
-            });
-            let secondCount = this.tableContent.filter(res => {
-                return res.PanelNo.toUpperCase().includes('2F')
-            });
-            let thirdCount = this.tableContent.filter(res => {
-                return res.PanelNo.toUpperCase().includes('3F')
-            })
-
-            this.firstFloor = firstCount.length
-            this.secondFloor = secondCount.length
-            this.thirdFloor = thirdCount.length
-            // console.log(firstCount, 'count');
+        floorComputation() {
+          this.firstFloor = 0
+          this.secondFloor = 0
+          this.thirdFloor = 0
+            for(let x= 0; x<this.tableContent.length;x++){
+              if(this.tableContent[x].PanelNo.includes('1S'))
+                this.firstFloor = this.firstFloor+this.tableContent[x].count
+              else if(this.tableContent[x].PanelNo.includes('2S'))
+                this.secondFloor = this.secondFloor+this.tableContent[x].count
+              else
+                this.thirdFloor = this.thirdFloor+this.tableContent[x].count
+            }
+       
         },
+        // ANCHOR: getPanelNo
         getPanelNo() {
-            let Request = this.processItem.RequestWeek + '-' + this.processItem.RequestYear
-            axios.get(`api/view?request=${Request}&&cdno=${this.processItem.ConstructionCode}&&hcode=${this.processItem.NameCode}`)
-                .then((res) => {
-                    this.tableContent = res.data
-                    // this.$store.commit('setEditView', res.data)
-                    this.floorConputation()
-                    console.log(this.tableContent);
-                })
+            this.mobileDialog = false
+            // this.isLoading=true;
 
-        }
-    }
-}
+            axios
+                .get(
+                    `api/camera`
+                )
+                .then((res) => {
+                    // disables the laoding after the image is done uploading & loading
+                    this.isLoadingCell = 0;
+                    this.pictures = true;
+                    // reload the images in the tbale
+                    this.picContent = res.data;
+                    
+                    this.isLoading = false;
+
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.clkpanelact = "";
+                    }, 1000);
+
+                    for (let x = 0; x < this.tableContent.length; x++) {
+                        this.tableContent[x].count = 0
+                        for (let y = 0; y < this.picContent.length; y++) {
+                            if (this.picContent[y].includes(this.tableContent[x].PanelNo)) {
+                                this.tableContent[x].count++
+                                this.tableContent[x]['no' + this.picContent[y][7]] = this.picContent[y]
+                                if (this.tableContent[x].max < Number(this.picContent[y][7])) {
+                                    this.tableContent[x].max = Number(this.picContent[y][7])
+                                }
+
+                            }
+
+                        }
+
+                    }
+                    this.floorComputation();
+                    this.loadingTable = false;
+
+                });
+        },
+    },
+};
 </script>
 
 <style>
-.dialog{
-    transition-timing-function: ease-in; 
-    transition: width 15s;
+#toolbar {
+    display: none !important;
+}
+
+#navpanes {
+    display: none !important;
+}
+
+#sidebar {
+    display: none !important;
+}
+
+#zoomIn {
+    display: none !important;
+}
+
+#zoomOut {
+    display: none !important;
+}
+
+.dialog {
+    margin: 20px;
+    padding: -16px;
 }
 
 .imagefit {
-
     height: 100%;
     width: 100%;
     display: block;
-
 }
 
 .table1-th {
-
     font-size: large;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
-
 }
+
 .table-header {
     z-index: 5 !important;
     height: 50px !important;
     width: 200px !important;
     text-align: center !important;
     color: white !important;
-    background-color: #3C282F !important;
+    background-color: #3c282f !important;
 }
 
 .table-headers {
@@ -428,14 +907,106 @@ export default {
     width: 200px !important;
     text-align: center !important;
     color: white !important;
-    background-color: #3C282F !important;
+    background-color: #3c282f !important;
 }
 
 .viewborder {
+    cursor: pointer;
     height: 100px !important;
     width: 200px;
     text-align: center;
     border: 1px solid black !important;
     padding: 0 !important;
+}
+
+.video {
+    object-fit: fill;
+}
+
+.video-container {
+    position: relative;
+    width: fit-content;
+}
+
+.play-button {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.swal-button--white-text {
+    color: white !important;
+}
+
+.camera-button .v-file-input {
+    display: none;
+}
+
+#create .v-btn--floating {
+    position: relative;
+}
+
+.dots::after {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    text-align: left;
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+@keyframes dots {
+
+    0%,
+    20% {
+        content: "";
+    }
+
+    40% {
+        content: ".";
+    }
+
+    60% {
+        content: "..";
+    }
+
+    80%,
+    100% {
+        content: "...";
+    }
+}
+
+.custom-scrollbar-hidden {
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+
+    & ::-webkit-scrollbar {
+        display: none;
+    }
+
+    & * {
+        overflow: hidden !important;
+    }
+
+    #create iframe {
+        overflow: hidden !important;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+
+    #create iframe::-webkit-scrollbar {
+        display: none;
+    }
+
 }
 </style>

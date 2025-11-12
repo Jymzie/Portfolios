@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Encoders\JpegEncoder;
+use Illuminate\Support\Facades\Storage;
 
 class CamController extends Controller
 {
@@ -15,15 +18,15 @@ class CamController extends Controller
      */
     public function index()
     {
-         $files = collect(Storage::disk('public')->allFiles('image'))
-                ->filter(function ($file) {
-                    return Str::endsWith($file, '.jpg');
-                })
-                ->map(function ($file) {
-                    return basename($file,'.jpg');
-                });
+        $files = collect(Storage::disk('public')->allFiles('images'))
+            ->filter(function ($file) {
+                return Str::endsWith($file, '.jpg');
+            })
+            ->map(function ($file) {
+                return basename($file,'.jpg');
+            });
 
-            return $files;
+        return $files;
     }
 
     /**
@@ -44,27 +47,34 @@ class CamController extends Controller
      */
     public function store(Request $req)
     {
-        $params = json_decode($req->params);
-        // $val = number_format(substr(substr($params->title, 7, 8),0,-4));
-        $panelnum = substr($params->title, 0, 6);
-        if($params->isretake){
-          
-            return Storage::disk('public')->put($params->path.'/'.$params->title, file_get_contents($req->file->getRealPath()));
-        
-        }else{
-            if(!Storage::disk('public')->exists($params->path.'/'.$params->title) && strlen($params->title)>=7)
-                return Storage::disk('public')->put($params->path.'/'.$params->title, file_get_contents($req->file->getRealPath()));
-            for($x=1 ; $x < 9 ; $x++){
-                if(!Storage::disk('public')->exists($params->path.'/'. $panelnum.'_'.$x.'.jpg')){
-                    return Storage::disk('public')->put($params->path.'/'. $panelnum.'_'.$x.'.jpg', file_get_contents($req->file->getRealPath()));
-                    break;
-                
-                }
-        }
 
+        $params = json_decode($req->params);
+        $val = number_format(substr(substr($params->title, 7, 8),0,-4));
+        $panelnum = substr($params->title, 0, 6);
        
+       
+
+        for($y=0; $y<$params->count;$y++){
+           $image =Image::read($req['file'.$y]->getRealPath())
+    ->encode(new JpegEncoder(100));
+    // ->autoOrient();
+             if($params->isretake){
+          
+                return Storage::disk('public')->put('images/'.$params->title, $image);
+            
+            }
+
+            for($x=1 ; $x < 9 ; $x++){
+                    if(!Storage::disk('public')->exists('images/'.$panelnum.'_'.$x.'.jpg')){
+                        $success = Storage::disk('public')->put('images/'.$panelnum.'_'.$x.'.jpg', $image);
+                        break;
+                    
+                    }
+            }
+           
         }
-        
+           
+        return $success;      
 
     }
 
@@ -74,9 +84,18 @@ class CamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show(Request $req, $id)
+    {   
+        $process = json_decode($req->data);
+        
+
+        if ($id == 'preview') {
+            $pdf = Pdf::loadView('process', compact('process'))
+                ->setPaper('A4', 'landscape');
+            // Storage::path('public/pdf/' . $imagepath . '/' . $nameCode . '.pdf', $pdf->output());
+            return $pdf->stream('Sample' . '.pdf');
+        } 
+        
     }
 
     /**
@@ -110,6 +129,7 @@ class CamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $res = Storage::disk('public')->delete('images/'.$id.'.jpg');
+        return $res;
     }
 }
