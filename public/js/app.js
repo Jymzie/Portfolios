@@ -2712,7 +2712,9 @@ __webpack_require__.r(__webpack_exports__);
             timer: 1000
           })["finally"](function () {
             // if (window.location.pathname == "/NPS/view") {
-            if (_this2.isretake) location.reload();else _this2.$emit("gettable");
+            // if (this.isretake) location.reload();
+            // else 
+            _this2.$emit("gettable");
             // } else this.$router.push("/view");
           });
         } else {
@@ -3112,6 +3114,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       tabs: null,
       pdfUrl: null,
       loadingPdfUrl: false,
+      timechange: 0,
       menuLeft: "mdi-menu-left",
       show: false,
       previewdialog: false,
@@ -3194,15 +3197,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     this.getPanelNo();
   },
   computed: {
-    paramFunction: function paramFunction() {
-      var currentDate = new Date();
-      return currentDate;
-    },
     viewpageNO: function viewpageNO() {
       return this.dialogItem.PicNO;
     }
   },
   methods: {
+    mRefreshImage: function mRefreshImage() {
+      var currentDate = new Date();
+      this.timechange = currentDate.toLocaleString();
+    },
     mLoadSave: function mLoadSave(item) {
       this.currentPanelNo = item.slice(0, 6);
       this.isLoadingCell = item[7];
@@ -3255,17 +3258,32 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     del: function del(item) {
       var _this3 = this;
+      this.currentPanelNo = item.slice(0, 6);
+      this.isLoadingCell = item[7];
       axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("api/camera/".concat(item)).then(function (res) {
         if (res.data == 1) {
           _this3.pdfPrint = "";
           _this3.pictureDialog = false;
-          _this3.$toast.success(item + " " + "has been deleted", "Success: ", _this3.notificationSystem.options.toastpositions);
+          _this3.$swal.fire({
+            title: "Image successfully deleted",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1000
+          });
           _this3.getPanelNo();
         } else {
-          _this3.$toast.warning(item + "" + "Failed to Delete", "Warning", _this3.notificationSystem.options.toastpositions);
+          _this3.$swal.fire({
+            title: "Failed to delete image",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1000
+          });
         }
       })["finally"](function () {
-        return location.reload();
+        return (
+          // location.reload()
+          _this3.getPanelNo()
+        );
       });
     },
     // NOTE: upload method
@@ -3520,9 +3538,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var _this6 = this;
       this.mobileDialog = false;
       // this.isLoading=true;
-
+      this.mRefreshImage();
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/camera").then(function (res) {
         // disables the laoding after the image is done uploading & loading
+        _this6.pictureDialog = false;
         _this6.isLoadingCell = 0;
         _this6.pictures = true;
         // reload the images in the tbale
@@ -3532,6 +3551,27 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         setTimeout(function () {
           _this6.clkpanelact = "";
         }, 1000);
+        _this6.tableContent = [{
+          PanelNo: "1SAMP1",
+          count: 0,
+          max: 0
+        }, {
+          PanelNo: "1SAMP2",
+          count: 0,
+          max: 0
+        }, {
+          PanelNo: "2SAMP1",
+          count: 0,
+          max: 0
+        }, {
+          PanelNo: "2SAMP2",
+          count: 0,
+          max: 0
+        }, {
+          PanelNo: "3SAMP1",
+          count: 0,
+          max: 0
+        }];
         for (var x = 0; x < _this6.tableContent.length; x++) {
           _this6.tableContent[x].count = 0;
           for (var y = 0; y < _this6.picContent.length; y++) {
@@ -23032,7 +23072,7 @@ var render = function () {
                                                 item["no" + counter] +
                                                 ".jpg" +
                                                 "?" +
-                                                _vm.paramFunction +
+                                                _vm.timechange +
                                                 "",
                                               contain: "",
                                             },
@@ -23242,7 +23282,7 @@ var render = function () {
                                         "_" +
                                         _vm.viewpageNO +
                                         ".jpg?" +
-                                        _vm.paramFunction,
+                                        _vm.timechange,
                                     },
                                   }),
                                 ])

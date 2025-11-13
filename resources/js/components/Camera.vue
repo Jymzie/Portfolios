@@ -207,8 +207,9 @@ export default {
               
                 .finally(() => {
                  // if (window.location.pathname == "/NPS/view") {
-                    if (this.isretake) location.reload();
-                    else this.$emit("gettable");
+                    // if (this.isretake) location.reload();
+                    // else 
+                    this.$emit("gettable");
                  // } else this.$router.push("/view");
                  
                 });

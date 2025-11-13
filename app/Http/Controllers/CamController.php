@@ -52,16 +52,22 @@ class CamController extends Controller
         $val = number_format(substr(substr($params->title, 7, 8),0,-4));
         $panelnum = substr($params->title, 0, 6);
        
-       
+       $success = 0;
 
         for($y=0; $y<$params->count;$y++){
-           $image =Image::read($req['file'.$y]->getRealPath())
-    ->encode(new JpegEncoder(100));
+            $image = file_get_contents($req['file'.$y]->getRealPath());
+    //        $image =Image::read($req['file'.$y]->getRealPath())
+    // ->encode(new JpegEncoder(100));
     // ->autoOrient();
              if($params->isretake){
           
                 return Storage::disk('public')->put('images/'.$params->title, $image);
             
+            }
+
+            if(!Storage::disk('public')->exists('images/'.$params->title)){
+                $success = Storage::disk('public')->put('images/'.$params->title, $image);
+                continue;
             }
 
             for($x=1 ; $x < 9 ; $x++){

@@ -102,7 +102,7 @@
                                 <v-icon v-else-if="item['no'+counter] == null" x-large>mdi-camera</v-icon>
 
                                 <!-- NOTE: if theres a picture, show it -->
-                                <img v-else class="imagefit" :src="'images/'+item['no'+counter]+'.jpg'+'?' + paramFunction + ''" contain />
+                                <img v-else class="imagefit" :src="'images/'+item['no'+counter]+'.jpg'+'?' + timechange + ''" contain />
                                 
                             </td>
 
@@ -164,7 +164,7 @@
                     '_' +
                     viewpageNO +
                     '.jpg?' +
-                    paramFunction
+                    timechange
                   " />
                         </div>
                         <div v-else>
@@ -296,6 +296,7 @@ export default {
         tabs: null,
         pdfUrl: null,
         loadingPdfUrl: false,
+        timechange:0,
         menuLeft: "mdi-menu-left",
         show: false,
         previewdialog: false,
@@ -413,16 +414,17 @@ export default {
 
     computed: {
 
-        paramFunction() {
-            const currentDate = new Date();
-            return currentDate;
-        },
+      
         viewpageNO() {
             return this.dialogItem.PicNO;
         },
     },
 
     methods: {
+        mRefreshImage() {
+            const currentDate = new Date();
+            this.timechange = currentDate.toLocaleString();
+        },
         mLoadSave(item) {
             this.currentPanelNo = item.slice(0, 6);
             this.isLoadingCell = item[7];
@@ -490,6 +492,8 @@ export default {
 
         },
         del(item) {
+            this.currentPanelNo = item.slice(0, 6)
+            this.isLoadingCell = item[7]
             axios
                 .delete(
                     `api/camera/${item}`
@@ -498,21 +502,27 @@ export default {
                     if (res.data == 1) {
                         this.pdfPrint = "";
                         this.pictureDialog = false;
-                        this.$toast.success(
-                            item + " " + "has been deleted",
-                            "Success: ",
-                            this.notificationSystem.options.toastpositions
-                        );
+                        this.$swal
+                        .fire({
+                            title: "Image successfully deleted",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        })
                         this.getPanelNo()
                     } else {
-                        this.$toast.warning(
-                            item + "" + "Failed to Delete",
-                            "Warning",
-                            this.notificationSystem.options.toastpositions
-                        );
+                         this.$swal.fire({
+                            title: "Failed to delete image",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
                     }
                 })
-                .finally(() => location.reload());
+                .finally(() => 
+                // location.reload()
+                this.getPanelNo()
+            );
         },
         // NOTE: upload method
         mUploadDialog(item, val, condition) {
@@ -808,13 +818,15 @@ export default {
         getPanelNo() {
             this.mobileDialog = false
             // this.isLoading=true;
-
+            this.mRefreshImage()
             axios
                 .get(
                     `api/camera`
                 )
                 .then((res) => {
                     // disables the laoding after the image is done uploading & loading
+                    this.pictureDialog = false;
+                   
                     this.isLoadingCell = 0;
                     this.pictures = true;
                     // reload the images in the tbale
@@ -827,6 +839,33 @@ export default {
                     setTimeout(() => {
                         this.clkpanelact = "";
                     }, 1000);
+
+                    this.tableContent = [{
+                            PanelNo: "1SAMP1",
+                            count: 0,
+                            max: 0
+                        },
+                        {
+                            PanelNo: "1SAMP2",
+                            count: 0,
+                            max: 0
+                        },
+                        {
+                            PanelNo: "2SAMP1",
+                            count: 0,
+                            max: 0
+                        },
+                        {
+                            PanelNo: "2SAMP2",
+                            count: 0,
+                            max: 0
+                        },
+                        {
+                            PanelNo: "3SAMP1",
+                            count: 0,
+                            max: 0
+                        },
+                    ]
 
                     for (let x = 0; x < this.tableContent.length; x++) {
                         this.tableContent[x].count = 0
