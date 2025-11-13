@@ -132,7 +132,7 @@
               ? 'border-radius: 10px;border: 3px solid black;   width: 80vw;'
               : 'border-radius: 10px;border: 3px solid black; width: 70vw;'
           " class="dialog position: center">
-                <v-row dense>
+                <v-row dense v-if="!isaxiosdel && !isaxiosupload">
                     <v-col cols="12" class="text-center">
                         <v-icon class="mt-2" fab size="60px" color="red" @click="(pictureDialog = false), (pictures = true)">mdi-close-circle
                         </v-icon>
@@ -182,7 +182,7 @@
 
                 <v-row align="center" class="justify-center">
                     <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
-                        <v-btn @click="OpeningCam(DialogPanelNo+'.jpg', 1, 'Retake')" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures">
+                        <v-btn @click="OpeningCam(DialogPanelNo+'.jpg', 1, 'Retake')" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel">
                             RETAKE
                         </v-btn>
 
@@ -190,14 +190,18 @@
 
                     <!-- Upload Button -->
                     <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
-                        <v-btn id="fileInputButton" onclick="document.getElementById('rfileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures">
-                            UPLOAD
+                        <v-btn id="fileInputButton" onclick="document.getElementById('rfileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel ">
+                            <span v-if="!isaxiosupload">UPLOAD</span>
+                            <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
                         </v-btn>
 
                         <input id="rfileInput" type="file" @change="uploadImage($event, 'retake')" style="display:none" accept="image/*" />
                     </v-col>
                     <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
-                        <v-btn style="font-weight: bold; background-color: #3c282f; color: white" @click="del(DialogPanelNo)" :disabled="!pictures">ERASE</v-btn>
+                        <v-btn style="font-weight: bold; background-color: #3c282f; color: white" @click="del(DialogPanelNo)" :disabled="!pictures || isaxiosupload || isaxiosdel">
+                            <span v-if="!isaxiosdel">ERASE</span>
+                            <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                        </v-btn>
                     </v-col>
                 </v-row>
                 <v-row align="center" class="justify-center">
@@ -238,14 +242,14 @@
     <v-dialog v-model="mobileDialog" width="400px" height="350px" persistent>
 
         <v-card align="center" class="pa-3">
-            <v-row dense class="mb-2">
+            <v-row dense class="mb-2" v-if="!isaxiosupload">
                 <v-col cols="12" class="text-center">
                     <v-icon class="mt-2" fab size="60px" color="red" @click="(mobileDialog = false), (pictures = true)">mdi-close-circle
                     </v-icon>
                 </v-col>
             </v-row>
 
-            <v-btn v-if="(param && param.length > 0)" x-large color="primary" width="150px" height="60px" elevation="2" depressed @click="OpeningCam(param[0],param[1],param[2])">
+            <v-btn :disabled="isaxiosupload" v-if="(param && param.length > 0)" x-large color="primary" width="150px" height="60px" elevation="2" depressed @click="OpeningCam(param[0],param[1],param[2])">
                 <!-- id="fileInputButton" onclick="document.getElementById('filecapture').click()"  -->
                 <v-icon>mdi-camera</v-icon>
                 Capture
@@ -260,9 +264,14 @@
 
           /> -->
             <!-- v-if="isMobile" -->
-            <v-btn color="primary" width="150px" height="60px" elevation="2" depressed id="fileInputButton" onclick="document.getElementById('fileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" left>
-                <v-icon>mdi-upload</v-icon>
-                Upload
+            <v-btn :disabled="isaxiosupload" color="primary" width="150px" height="60px" elevation="2" depressed id="fileInputButton" onclick="document.getElementById('fileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" left>
+                <div v-if="!isaxiosupload">
+                    <v-icon>mdi-upload</v-icon>
+                    Upload
+                </div>
+                
+
+                <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
             </v-btn>
 
             <input id="fileInput" type="file" @change="uploadImage" style="display:none" accept="image/*" />
@@ -289,6 +298,8 @@ export default {
         // NOTE: Looping of picture column 
         picCols: [1, 2, 3, 4, 5, 6, 7, 8],
         clkpanelact: "",
+        isaxiosdel:false,
+        isaxiosupload:false,
         pdfPrint: "",
         isLoading: false,
         fab: false,
@@ -494,6 +505,7 @@ export default {
         del(item) {
             this.currentPanelNo = item.slice(0, 6)
             this.isLoadingCell = item[7]
+            this.isaxiosdel = true
             axios
                 .delete(
                     `api/camera/${item}`
@@ -519,9 +531,13 @@ export default {
                         });
                     }
                 })
-                .finally(() => 
-                // location.reload()
+                .finally(() => {
+                this.isaxiosdel = false
                 this.getPanelNo()
+                // location.reload()
+                }
+                
+                
             );
         },
         // NOTE: upload method
@@ -542,6 +558,7 @@ export default {
         },
         // NOTE Upload Image
         uploadImage(event, val) {
+            this.isaxiosupload = true
             // console.log('here', this.param[1]);
             this.isLoading = true;
 
@@ -600,8 +617,10 @@ export default {
                                 this.isLoading = false;
                             })
                             .finally(() => {
-                                if (this.isretake) location.reload();
-                                else this.getPanelNo();
+                                // if (this.isretake) location.reload();
+                                // else 
+                                this.isaxiosupload = false
+                                this.getPanelNo();
                             });
                     } else {
                         this.$swal.fire({

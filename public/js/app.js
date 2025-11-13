@@ -2578,6 +2578,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -2602,6 +2611,7 @@ __webpack_require__.r(__webpack_exports__);
       // TableHeader: ['EMPLOYEE CODE', 'EMPLOYEE NAME', 'DEP/SEC/TEAM', 'USER LEVEL', 'ACTION'],
       // SchedHeader: ['PANEL', 'QTY', 'TAKE'],
       // Contents: [],
+      isaxiosload: false,
       isPhotoTaken: false,
       imageName: "TRRYY",
       ischangeorientation: "",
@@ -2676,6 +2686,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     savePicture: function savePicture() {
       var _this2 = this;
+      this.isaxiosload = true;
       var paramsObj = {};
       paramsObj.title = this.currentPanelNo;
       paramsObj.path = this.imagePath;
@@ -2714,6 +2725,7 @@ __webpack_require__.r(__webpack_exports__);
             // if (window.location.pathname == "/NPS/view") {
             // if (this.isretake) location.reload();
             // else 
+            _this2.isaxiosload = false;
             _this2.$emit("gettable");
             // } else this.$router.push("/view");
           });
@@ -3094,6 +3106,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3107,6 +3128,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       // NOTE: Looping of picture column 
       picCols: [1, 2, 3, 4, 5, 6, 7, 8],
       clkpanelact: "",
+      isaxiosdel: false,
+      isaxiosupload: false,
       pdfPrint: "",
       isLoading: false,
       fab: false,
@@ -3260,6 +3283,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var _this3 = this;
       this.currentPanelNo = item.slice(0, 6);
       this.isLoadingCell = item[7];
+      this.isaxiosdel = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("api/camera/".concat(item)).then(function (res) {
         if (res.data == 1) {
           _this3.pdfPrint = "";
@@ -3280,10 +3304,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           });
         }
       })["finally"](function () {
-        return (
-          // location.reload()
-          _this3.getPanelNo()
-        );
+        _this3.isaxiosdel = false;
+        _this3.getPanelNo();
+        // location.reload()
       });
     },
     // NOTE: upload method
@@ -3303,6 +3326,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     // NOTE Upload Image
     uploadImage: function uploadImage(event, val) {
       var _this4 = this;
+      this.isaxiosupload = true;
       // console.log('here', this.param[1]);
       this.isLoading = true;
       var picNum = '';
@@ -3351,7 +3375,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             _this4.pictureDialog = false;
             _this4.isLoading = false;
           })["finally"](function () {
-            if (_this4.isretake) location.reload();else _this4.getPanelNo();
+            // if (this.isretake) location.reload();
+            // else 
+            _this4.isaxiosupload = false;
+            _this4.getPanelNo();
           });
         } else {
           _this4.$swal.fire({
@@ -22583,84 +22610,79 @@ var render = function () {
                       },
                     }),
                     _vm._v(" "),
-                    _c(
-                      "v-btn",
-                      {
-                        directives: [
+                    (!_vm.isPhotoTaken &&
+                      !_vm.isretake &&
+                      _vm.OpenCam - 1 + _vm.photoarraycount != 8 &&
+                      !_vm.isaxiosload) ||
+                    (_vm.isretake &&
+                      _vm.photoarraycount == 0 &&
+                      !_vm.isaxiosload)
+                      ? _c(
+                          "v-btn",
                           {
-                            name: "show",
-                            rawName: "v-show",
-                            value:
-                              (!_vm.isPhotoTaken &&
-                                !_vm.isretake &&
-                                _vm.OpenCam - 1 + _vm.photoarraycount != 8) ||
-                              (_vm.isretake && _vm.photoarraycount == 0),
-                            expression:
-                              "!isPhotoTaken && \n            (!isretake && (OpenCam-1)+photoarraycount != 8) ||\n            (isretake && photoarraycount == 0)",
+                            staticClass: "text-center play-button",
+                            attrs: { fab: "", "x-large": "", bottom: "" },
+                            on: { click: _vm.mCapture },
                           },
-                        ],
-                        staticClass: "text-center play-button",
-                        attrs: { fab: "", "x-large": "", bottom: "" },
-                        on: { click: _vm.mCapture },
-                      },
-                      [
-                        _c(
-                          "v-icon",
-                          { attrs: { "x-large": "", color: "primary" } },
-                          [_vm._v("mdi-camera-outline")]
-                        ),
-                      ],
-                      1
-                    ),
+                          [
+                            _c(
+                              "v-icon",
+                              { attrs: { "x-large": "", color: "primary" } },
+                              [_vm._v("mdi-camera-outline")]
+                            ),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
                     _vm._v(" "),
-                    _c(
-                      "v-btn",
-                      {
-                        directives: [
+                    !_vm.isPhotoTaken && _vm.photoarraycount != 0
+                      ? _c(
+                          "v-btn",
                           {
-                            name: "show",
-                            rawName: "v-show",
-                            value:
-                              !_vm.isPhotoTaken && _vm.photoarraycount != 0,
-                            expression: "!isPhotoTaken && photoarraycount != 0",
+                            staticClass: "mt-3 text-center green white--text",
+                            attrs: { disabled: _vm.isaxiosload, bottom: "" },
+                            on: { click: _vm.savePicture },
                           },
-                        ],
-                        staticClass: "mt-3 text-center green white--text",
-                        attrs: { bottom: "" },
-                        on: { click: _vm.savePicture },
-                      },
-                      [
-                        _c("v-icon", { staticClass: "mr-5" }, [
-                          _vm._v("mdi-content-save"),
-                        ]),
-                        _vm._v("\n                Save\n              "),
-                      ],
-                      1
-                    ),
+                          [
+                            !_vm.isaxiosload
+                              ? _c(
+                                  "div",
+                                  [
+                                    _c("v-icon", { staticClass: "mr-5" }, [
+                                      _vm._v("mdi-content-save"),
+                                    ]),
+                                    _vm._v(
+                                      "\n                  Save\n                "
+                                    ),
+                                  ],
+                                  1
+                                )
+                              : _c("v-progress-circular", {
+                                  staticStyle: { padding: "0", margin: "0" },
+                                  attrs: { size: "30" },
+                                }),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
                     _vm._v(" "),
-                    _c(
-                      "v-btn",
-                      {
-                        directives: [
+                    !_vm.isPhotoTaken && !_vm.isaxiosload
+                      ? _c(
+                          "v-btn",
                           {
-                            name: "show",
-                            rawName: "v-show",
-                            value: !_vm.isPhotoTaken,
-                            expression: "!isPhotoTaken",
+                            staticClass: "mt-3 text-center red white--text",
+                            attrs: { bottom: "" },
+                            on: { click: _vm.stopCameraStream },
                           },
-                        ],
-                        staticClass: "mt-3 text-center red white--text",
-                        attrs: { bottom: "" },
-                        on: { click: _vm.stopCameraStream },
-                      },
-                      [
-                        _c("v-icon", { staticClass: "mr-1 " }, [
-                          _vm._v("mdi-close"),
-                        ]),
-                        _vm._v("\n                Discard\n              "),
-                      ],
-                      1
-                    ),
+                          [
+                            _c("v-icon", { staticClass: "mr-1 " }, [
+                              _vm._v("mdi-close"),
+                            ]),
+                            _vm._v("\n                Discard\n              "),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
                   ],
                   1
                 ),
@@ -23167,38 +23189,47 @@ var render = function () {
                   attrs: { align: "center" },
                 },
                 [
-                  _c(
-                    "v-row",
-                    { attrs: { dense: "" } },
-                    [
-                      _c(
-                        "v-col",
-                        { staticClass: "text-center", attrs: { cols: "12" } },
+                  !_vm.isaxiosdel && !_vm.isaxiosupload
+                    ? _c(
+                        "v-row",
+                        { attrs: { dense: "" } },
                         [
                           _c(
-                            "v-icon",
+                            "v-col",
                             {
-                              staticClass: "mt-2",
-                              attrs: { fab: "", size: "60px", color: "red" },
-                              on: {
-                                click: function ($event) {
-                                  ;(_vm.pictureDialog = false),
-                                    (_vm.pictures = true)
-                                },
-                              },
+                              staticClass: "text-center",
+                              attrs: { cols: "12" },
                             },
                             [
-                              _vm._v(
-                                "mdi-close-circle\r\n                        "
+                              _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mt-2",
+                                  attrs: {
+                                    fab: "",
+                                    size: "60px",
+                                    color: "red",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      ;(_vm.pictureDialog = false),
+                                        (_vm.pictures = true)
+                                    },
+                                  },
+                                },
+                                [
+                                  _vm._v(
+                                    "mdi-close-circle\r\n                        "
+                                  ),
+                                ]
                               ),
-                            ]
+                            ],
+                            1
                           ),
                         ],
                         1
-                      ),
-                    ],
-                    1
-                  ),
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "v-row",
@@ -23393,7 +23424,12 @@ var render = function () {
                                 "background-color": "#3c282f",
                                 color: "white",
                               },
-                              attrs: { disabled: !_vm.pictures },
+                              attrs: {
+                                disabled:
+                                  !_vm.pictures ||
+                                  _vm.isaxiosupload ||
+                                  _vm.isaxiosdel,
+                              },
                               on: {
                                 click: function ($event) {
                                   return _vm.OpeningCam(
@@ -23438,14 +23474,21 @@ var render = function () {
                                 id: "fileInputButton",
                                 onclick:
                                   "document.getElementById('rfileInput').click()",
-                                disabled: !_vm.pictures,
+                                disabled:
+                                  !_vm.pictures ||
+                                  _vm.isaxiosupload ||
+                                  _vm.isaxiosdel,
                               },
                             },
                             [
-                              _vm._v(
-                                "\r\n                            UPLOAD\r\n                        "
-                              ),
-                            ]
+                              !_vm.isaxiosupload
+                                ? _c("span", [_vm._v("UPLOAD")])
+                                : _c("v-progress-circular", {
+                                    staticStyle: { padding: "0", margin: "0" },
+                                    attrs: { size: "30" },
+                                  }),
+                            ],
+                            1
                           ),
                           _vm._v(" "),
                           _c("input", {
@@ -23485,14 +23528,27 @@ var render = function () {
                                 "background-color": "#3c282f",
                                 color: "white",
                               },
-                              attrs: { disabled: !_vm.pictures },
+                              attrs: {
+                                disabled:
+                                  !_vm.pictures ||
+                                  _vm.isaxiosupload ||
+                                  _vm.isaxiosdel,
+                              },
                               on: {
                                 click: function ($event) {
                                   return _vm.del(_vm.DialogPanelNo)
                                 },
                               },
                             },
-                            [_vm._v("ERASE")]
+                            [
+                              !_vm.isaxiosdel
+                                ? _c("span", [_vm._v("ERASE")])
+                                : _c("v-progress-circular", {
+                                    staticStyle: { padding: "0", margin: "0" },
+                                    attrs: { size: "30" },
+                                  }),
+                            ],
+                            1
                           ),
                         ],
                         1
@@ -23670,39 +23726,43 @@ var render = function () {
             "v-card",
             { staticClass: "pa-3", attrs: { align: "center" } },
             [
-              _c(
-                "v-row",
-                { staticClass: "mb-2", attrs: { dense: "" } },
-                [
-                  _c(
-                    "v-col",
-                    { staticClass: "text-center", attrs: { cols: "12" } },
+              !_vm.isaxiosupload
+                ? _c(
+                    "v-row",
+                    { staticClass: "mb-2", attrs: { dense: "" } },
                     [
                       _c(
-                        "v-icon",
-                        {
-                          staticClass: "mt-2",
-                          attrs: { fab: "", size: "60px", color: "red" },
-                          on: {
-                            click: function ($event) {
-                              ;(_vm.mobileDialog = false), (_vm.pictures = true)
+                        "v-col",
+                        { staticClass: "text-center", attrs: { cols: "12" } },
+                        [
+                          _c(
+                            "v-icon",
+                            {
+                              staticClass: "mt-2",
+                              attrs: { fab: "", size: "60px", color: "red" },
+                              on: {
+                                click: function ($event) {
+                                  ;(_vm.mobileDialog = false),
+                                    (_vm.pictures = true)
+                                },
+                              },
                             },
-                          },
-                        },
-                        [_vm._v("mdi-close-circle\r\n                    ")]
+                            [_vm._v("mdi-close-circle\r\n                    ")]
+                          ),
+                        ],
+                        1
                       ),
                     ],
                     1
-                  ),
-                ],
-                1
-              ),
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _vm.param && _vm.param.length > 0
                 ? _c(
                     "v-btn",
                     {
                       attrs: {
+                        disabled: _vm.isaxiosupload,
                         "x-large": "",
                         color: "primary",
                         width: "150px",
@@ -23737,6 +23797,7 @@ var render = function () {
                     color: "white",
                   },
                   attrs: {
+                    disabled: _vm.isaxiosupload,
                     color: "primary",
                     width: "150px",
                     height: "60px",
@@ -23748,8 +23809,21 @@ var render = function () {
                   },
                 },
                 [
-                  _c("v-icon", [_vm._v("mdi-upload")]),
-                  _vm._v("\r\n                Upload\r\n            "),
+                  !_vm.isaxiosupload
+                    ? _c(
+                        "div",
+                        [
+                          _c("v-icon", [_vm._v("mdi-upload")]),
+                          _vm._v(
+                            "\r\n                    Upload\r\n                "
+                          ),
+                        ],
+                        1
+                      )
+                    : _c("v-progress-circular", {
+                        staticStyle: { padding: "0", margin: "0" },
+                        attrs: { size: "30" },
+                      }),
                 ],
                 1
               ),

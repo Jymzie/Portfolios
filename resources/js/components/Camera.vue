@@ -26,21 +26,30 @@
               @click="mCapture"
               bottom
               class="text-center play-button"
-              v-show="!isPhotoTaken && 
-              (!isretake && (OpenCam-1)+photoarraycount != 8) ||
-              (isretake && photoarraycount == 0)"
+              v-if="!isPhotoTaken && 
+              (!isretake && (OpenCam-1)+photoarraycount != 8 &&
+              !isaxiosload) ||
+              (isretake && photoarraycount == 0 &&
+              !isaxiosload) "
      
             >
            
               <v-icon x-large color="primary">mdi-camera-outline</v-icon>
             </v-btn>
-            <v-btn  v-show="!isPhotoTaken && photoarraycount != 0" @click="savePicture" bottom class="mt-3 text-center green white--text">
-                  <v-icon class="mr-5">mdi-content-save</v-icon>
-                  Save
+            <v-btn :disabled="isaxiosload"  v-if="!isPhotoTaken && photoarraycount != 0" @click="savePicture" bottom class="mt-3 text-center green white--text">
+                  <div v-if="!isaxiosload">
+                    <v-icon  class="mr-5">mdi-content-save</v-icon>
+                    Save
+                  </div>
+                 
+                  <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                  
+                   
                 </v-btn>
                 <v-btn
                   @click="stopCameraStream"
-                  v-show="!isPhotoTaken"
+                  v-if="!isPhotoTaken&&
+                      !isaxiosload"
                   bottom
                   class="mt-3 text-center red white--text"
                 >
@@ -78,6 +87,7 @@ export default {
     // TableHeader: ['EMPLOYEE CODE', 'EMPLOYEE NAME', 'DEP/SEC/TEAM', 'USER LEVEL', 'ACTION'],
     // SchedHeader: ['PANEL', 'QTY', 'TAKE'],
     // Contents: [],
+    isaxiosload: false,
     isPhotoTaken: false,
     imageName: "TRRYY",
     ischangeorientation: "",
@@ -161,7 +171,7 @@ export default {
         
     },
     savePicture() { 
- 
+        this.isaxiosload = true
         let paramsObj = {};
         paramsObj.title = this.currentPanelNo;
         paramsObj.path = this.imagePath;
@@ -209,6 +219,7 @@ export default {
                  // if (window.location.pathname == "/NPS/view") {
                     // if (this.isretake) location.reload();
                     // else 
+                    this.isaxiosload = false
                     this.$emit("gettable");
                  // } else this.$router.push("/view");
                  
