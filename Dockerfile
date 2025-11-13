@@ -7,9 +7,9 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libonig-dev \
     libzip-dev \
-    libfreetype6-dev \
+    **libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng-dev \
+    libpng-dev** \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
