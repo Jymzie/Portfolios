@@ -49,7 +49,7 @@ class CamController extends Controller
     {
 
         $params = json_decode($req->params);
-        $val = number_format(substr(substr($params->title, 7, 8),0,-4));
+        // $val = number_format(substr(substr($params->title, 7, 8),0,-4));
         $panelnum = substr($params->title, 0, 6);
        
        $success = 0;
