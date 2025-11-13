@@ -2721,14 +2721,17 @@ __webpack_require__.r(__webpack_exports__);
             icon: "success",
             showConfirmButton: false,
             timer: 1000
-          })["finally"](function () {
-            // if (window.location.pathname == "/NPS/view") {
-            // if (this.isretake) location.reload();
-            // else 
-            _this2.isaxiosload = false;
-            _this2.$emit("gettable");
-            // } else this.$router.push("/view");
           });
+
+          // .finally(() => {
+          // if (window.location.pathname == "/NPS/view") {
+          // if (this.isretake) location.reload();
+          // else 
+          // this.isaxiosload = false
+          // this.$emit("gettable");
+          // } else this.$router.push("/view");
+
+          // });
         } else {
           _this2.$swal.fire({
             title: "Failed to save image",
@@ -2746,6 +2749,9 @@ __webpack_require__.r(__webpack_exports__);
           showConfirmButton: false,
           timer: 1000
         });
+      })["finally"](function () {
+        _this2.isaxiosload = false;
+        _this2.$emit("gettable");
       });
     },
     createCamera: function createCamera() {
@@ -3353,6 +3359,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var formData = new FormData();
       formData.append("file0", file);
       formData.append("params", JSON.stringify(paramsObj));
+      this.isLoadingCell = val !== undefined ? this.dialogItem.PicNO : this.param[1];
       axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: "POST",
         url: "api/camera",
@@ -3369,17 +3376,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             timer: 1000
           }).then(function () {
             // Only enables the loading for the selected Panel and Picno
-            _this4.isLoadingCell = val !== undefined ? _this4.dialogItem.PicNO : _this4.param[1];
+
             // console.log('panel', this.currentPanelNo)
-            _this4.mobileDialog = false;
-            _this4.pictureDialog = false;
+
             _this4.isLoading = false;
-          })["finally"](function () {
-            // if (this.isretake) location.reload();
-            // else 
-            _this4.isaxiosupload = false;
-            _this4.getPanelNo();
           });
+          // .finally(() => {
+          // if (this.isretake) location.reload();
+          //    this.isaxiosupload = false
+          //     this.getPanelNo();
+          // else 
+
+          // });
         } else {
           _this4.$swal.fire({
             title: "Failed to save image",
@@ -3399,9 +3407,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           timer: 1000
         });
       })["finally"](function () {
-        _this4.isLoadingCell = 0;
-        // download captured image to the user's tablet
-        // use as a backup
+        _this4.mobileDialog = false;
+        _this4.pictureDialog = false;
+        _this4.isaxiosupload = false;
+        _this4.getPanelNo();
       });
     },
     stopCameraStream: function stopCameraStream() {
@@ -3631,12 +3640,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -23890,7 +23893,7 @@ var render = function () {
       _c(
         "v-navigation-drawer",
         {
-          attrs: { app: "" },
+          attrs: { clipped: "", app: "" },
           model: {
             value: _vm.drawer,
             callback: function ($$v) {
@@ -23939,7 +23942,10 @@ var render = function () {
       _vm._v(" "),
       _c(
         "v-app-bar",
-        { staticStyle: { "z-index": "99" }, attrs: { app: "" } },
+        {
+          staticStyle: { "z-index": "99" },
+          attrs: { app: "", "clipped-left": "" },
+        },
         [
           _c("v-app-bar-nav-icon", {
             on: {

@@ -589,7 +589,7 @@ export default {
             const formData = new FormData();
             formData.append("file0", file);
             formData.append("params", JSON.stringify(paramsObj));
-
+            this.isLoadingCell = val !== undefined ? this.dialogItem.PicNO : this.param[1];
             axios({
                     method: "POST",
                     url: `api/camera`,
@@ -610,18 +610,18 @@ export default {
                             })
                             .then(() => {
                                 // Only enables the loading for the selected Panel and Picno
-                                this.isLoadingCell = val !== undefined ? this.dialogItem.PicNO : this.param[1];
+                                
                                 // console.log('panel', this.currentPanelNo)
-                                this.mobileDialog = false;
-                                this.pictureDialog = false;
+                               
                                 this.isLoading = false;
                             })
-                            .finally(() => {
+                            // .finally(() => {
                                 // if (this.isretake) location.reload();
+                                //    this.isaxiosupload = false
+                                //     this.getPanelNo();
                                 // else 
-                                this.isaxiosupload = false
-                                this.getPanelNo();
-                            });
+                             
+                            // });
                     } else {
                         this.$swal.fire({
                             title: "Failed to save image",
@@ -644,10 +644,10 @@ export default {
                     });
                 })
                 .finally(() => {
-                    this.isLoadingCell = 0;
-                    // download captured image to the user's tablet
-                    // use as a backup
-
+                    this.mobileDialog = false;
+                    this.pictureDialog = false;
+                    this.isaxiosupload = false
+                    this.getPanelNo();
                 });
         },
         stopCameraStream() {

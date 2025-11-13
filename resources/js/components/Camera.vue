@@ -215,15 +215,15 @@ export default {
                   timer: 1000,
                 })
               
-                .finally(() => {
+                // .finally(() => {
                  // if (window.location.pathname == "/NPS/view") {
                     // if (this.isretake) location.reload();
                     // else 
-                    this.isaxiosload = false
-                    this.$emit("gettable");
+                    // this.isaxiosload = false
+                    // this.$emit("gettable");
                  // } else this.$router.push("/view");
                  
-                });
+                // });
             } else {
               this.$swal.fire({
                 title: "Failed to save image",
@@ -242,7 +242,11 @@ export default {
               showConfirmButton: false,
               timer: 1000,
             });
-          });
+          })
+          .finally(() => {
+              this.isaxiosload = false
+              this.$emit("gettable");
+          })
           
     },
 
