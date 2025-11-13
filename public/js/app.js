@@ -3257,7 +3257,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       } else {
         var link = document.createElement("a");
         link.href = this.pdfPrint;
-        link.setAttribute("download", 'Sample');
+        link.setAttribute("download", 'Sample.pdf');
         document.body.appendChild(link);
         link.click();
         link.remove();

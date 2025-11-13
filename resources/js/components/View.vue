@@ -462,7 +462,7 @@ export default {
             } else {
                 const link = document.createElement("a");
                 link.href = this.pdfPrint;
-                link.setAttribute("download", 'Sample');
+                link.setAttribute("download", 'Sample.pdf');
                 document.body.appendChild(link);
                 link.click();
                 link.remove();

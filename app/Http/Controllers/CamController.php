@@ -93,7 +93,12 @@ class CamController extends Controller
     public function show(Request $req, $id)
     {   
         $process = json_decode($req->data);
-        
+        if (ob_get_level() > 0) {
+    ob_end_clean(); 
+}
+
+// 2. Start a fresh output buffer for safety (optional, but good practice)
+ob_start();
 
         if ($id == 'preview') {
             $pdf = Pdf::loadView('process', compact('process'))
