@@ -4,8 +4,9 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y \
     git curl unzip libpq-dev libonig-dev libzip-dev zip \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    libexif-dev \  # Add this line for EXIF support
     && docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install gd
+    && docker-php-ext-install gd exif  # Add exif here
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
