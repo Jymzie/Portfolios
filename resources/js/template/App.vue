@@ -1,6 +1,6 @@
 <template>
 <v-app>
-    <v-navigation-drawer v-model="drawer" clipped app>
+    <v-navigation-drawer v-model="drawer" clipped app touchless mobile-breakpoint="0">
         <v-list dense>
             <v-subheader>SYSTEM PREVIEWS:</v-subheader>
             <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">

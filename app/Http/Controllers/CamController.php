@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Intervention\Image\Laravel\Facades\Image;
-use Intervention\Image\Encoders\JpegEncoder;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class CamController extends Controller
@@ -55,7 +55,8 @@ class CamController extends Controller
        $success = 0;
 
         for($y=0; $y<$params->count;$y++){
-            $image = file_get_contents($req['file'.$y]->getRealPath());
+            // $image = file_get_contents($req['file'.$y]->getRealPath());
+           $image = Image::make($req['file'.$y]->getRealPath())->encode('jpg', 100)->orientate();
     //        $image =Image::read($req['file'.$y]->getRealPath())
     // ->encode(new JpegEncoder(100));
     // ->autoOrient();

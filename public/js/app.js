@@ -23893,7 +23893,12 @@ var render = function () {
       _c(
         "v-navigation-drawer",
         {
-          attrs: { clipped: "", app: "" },
+          attrs: {
+            clipped: "",
+            app: "",
+            touchless: "",
+            "mobile-breakpoint": "0",
+          },
           model: {
             value: _vm.drawer,
             callback: function ($$v) {
