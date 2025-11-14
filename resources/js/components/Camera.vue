@@ -42,7 +42,8 @@
                     Save
                   </div>
                  
-                  <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                  <v-progress-circular indeterminate
+      color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
                   
                    
                 </v-btn>

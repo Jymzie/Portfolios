@@ -2587,6 +2587,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -2834,6 +2835,9 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+//
+//
+//
 //
 //
 //
@@ -3566,7 +3570,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.secondFloor = 0;
       this.thirdFloor = 0;
       for (var x = 0; x < this.tableContent.length; x++) {
-        if (this.tableContent[x].PanelNo.includes('1S')) this.firstFloor = this.firstFloor + this.tableContent[x].count;else if (this.tableContent[x].PanelNo.includes('2S')) this.secondFloor = this.secondFloor + this.tableContent[x].count;else this.thirdFloor = this.thirdFloor + this.tableContent[x].count;
+        //   if(this.tableContent[x].PanelNo.includes('1S'))
+        this.firstFloor = this.firstFloor + this.tableContent[x].count;
+        //   else if(this.tableContent[x].PanelNo.includes('2S'))
+        //     this.secondFloor = this.secondFloor+this.tableContent[x].count
+        //   else
+        //     this.thirdFloor = this.thirdFloor+this.tableContent[x].count
       }
     },
     // ANCHOR: getPanelNo
@@ -22662,7 +22671,11 @@ var render = function () {
                                 )
                               : _c("v-progress-circular", {
                                   staticStyle: { padding: "0", margin: "0" },
-                                  attrs: { size: "30" },
+                                  attrs: {
+                                    indeterminate: "",
+                                    color: "primary",
+                                    size: "30",
+                                  },
                                 }),
                           ],
                           1
@@ -22766,132 +22779,7 @@ var render = function () {
     [
       _c(
         "v-row",
-        { attrs: { dense: "" } },
-        [
-          _c(
-            "v-col",
-            {
-              staticClass: "text-left",
-              attrs: { cols: "4", lg: "4", md: "5", sm: "6" },
-            },
-            [_c("div", { staticClass: "my-n5" })]
-          ),
-          _vm._v(" "),
-          !_vm.$vuetify.breakpoint.smOnly
-            ? _c("v-col", { attrs: { cols: "4", lg: "4", md: "1" } })
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-col",
-            {
-              staticClass: "text-rigth",
-              attrs: { cols: "4", lg: "4", md: "6", sm: "6" },
-            },
-            [
-              _c(
-                "v-simple-table",
-                { staticStyle: { border: "1px block" }, attrs: { dense: "" } },
-                [
-                  _c("thead", [
-                    _c(
-                      "tr",
-                      { staticStyle: { "background-color": "#3c282f" } },
-                      [
-                        _c(
-                          "th",
-                          {
-                            staticStyle: {
-                              "text-align": "center",
-                              color: "white",
-                              "font-weight": "bold",
-                            },
-                            attrs: { colspan: "3" },
-                          },
-                          [
-                            _vm._v(
-                              "\r\n                            TOTAL SAMPLE\r\n                        "
-                            ),
-                          ]
-                        ),
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "tr",
-                      { staticStyle: { "background-color": "#3c282f" } },
-                      [
-                        _c(
-                          "th",
-                          {
-                            staticStyle: {
-                              "text-align": "center",
-                              color: "white",
-                            },
-                          },
-                          [_vm._v("1")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "th",
-                          {
-                            staticStyle: {
-                              "text-align": "center",
-                              color: "white",
-                            },
-                          },
-                          [_vm._v("2")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "th",
-                          {
-                            staticStyle: {
-                              "text-align": "center",
-                              color: "white",
-                            },
-                          },
-                          [_vm._v("3")]
-                        ),
-                      ]
-                    ),
-                  ]),
-                  _vm._v(" "),
-                  _c("tbody", [
-                    _c("tr", [
-                      _c("td", { staticStyle: { "text-align": "center" } }, [
-                        _vm._v(_vm._s(_vm.firstFloor)),
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticStyle: { "text-align": "center" } }, [
-                        _vm._v(_vm._s(_vm.secondFloor)),
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticStyle: { "text-align": "center" } }, [
-                        _vm._v(_vm._s(_vm.thirdFloor)),
-                      ]),
-                    ]),
-                  ]),
-                ]
-              ),
-              _vm._v(" "),
-              [
-                _c("div", [
-                  _c("div", { staticClass: "table1-th" }, [
-                    _vm._v(
-                      "\r\n                        SCANNED BY: JIMWELL C. PUNZALAN\r\n                    "
-                    ),
-                  ]),
-                ]),
-              ],
-            ],
-            2
-          ),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
+        { staticClass: "mt-1" },
         [
           _c(
             "v-col",
@@ -22902,7 +22790,7 @@ var render = function () {
                   staticClass: "my-n3 mt-n5",
                   staticStyle: { border: "1px solid black" },
                   attrs: {
-                    height: _vm.$vuetify.breakpoint.height - 290 + "px",
+                    height: _vm.$vuetify.breakpoint.height - 175 + "px",
                     "fixed-header": "",
                   },
                 },
@@ -23125,7 +23013,10 @@ var render = function () {
       _c(
         "v-row",
         [
-          _c("v-col", { staticClass: "text-left", attrs: { cols: "6" } }),
+          _c("v-col", { staticClass: "text-left", attrs: { cols: "6" } }, [
+            _c("b", [_vm._v("Total Pictures:")]),
+            _vm._v(" " + _vm._s(_vm.firstFloor) + "\r\n        "),
+          ]),
           _vm._v(" "),
           _c(
             "v-col",
@@ -23488,7 +23379,11 @@ var render = function () {
                                 ? _c("span", [_vm._v("UPLOAD")])
                                 : _c("v-progress-circular", {
                                     staticStyle: { padding: "0", margin: "0" },
-                                    attrs: { size: "30" },
+                                    attrs: {
+                                      indeterminate: "",
+                                      color: "primary",
+                                      size: "30",
+                                    },
                                   }),
                             ],
                             1
@@ -23548,7 +23443,11 @@ var render = function () {
                                 ? _c("span", [_vm._v("ERASE")])
                                 : _c("v-progress-circular", {
                                     staticStyle: { padding: "0", margin: "0" },
-                                    attrs: { size: "30" },
+                                    attrs: {
+                                      indeterminate: "",
+                                      color: "primary",
+                                      size: "30",
+                                    },
                                   }),
                             ],
                             1
@@ -23825,7 +23724,11 @@ var render = function () {
                       )
                     : _c("v-progress-circular", {
                         staticStyle: { padding: "0", margin: "0" },
-                        attrs: { size: "30" },
+                        attrs: {
+                          indeterminate: "",
+                          color: "primary",
+                          size: "30",
+                        },
                       }),
                 ],
                 1

@@ -1,6 +1,6 @@
 <template>
 <v-container fluid>
-    <v-row dense>
+    <!-- <v-row dense>
         <v-col cols="4" lg="4" md="5" sm="6" class="text-left">
             <div class="my-n5">
 
@@ -37,11 +37,11 @@
                 </div>
             </template>
         </v-col>
-    </v-row>
+    </v-row> -->
 
-    <v-row>
+    <v-row class="mt-1">
         <v-col>
-            <v-simple-table :height="$vuetify.breakpoint.height- 290 + 'px'" fixed-header class="my-n3 mt-n5" style="border: 1px solid black">
+            <v-simple-table :height="$vuetify.breakpoint.height- 175 + 'px'" fixed-header class="my-n3 mt-n5" style="border: 1px solid black">
                 <thead>
                     <tr>
                         <th class="table-header">PANEL NO</th>
@@ -114,7 +114,7 @@
     </v-row>
     <v-row>
         <v-col cols="6" class="text-left">
-
+            <b>Total Pictures:</b> {{ firstFloor }}
         </v-col>
         <v-col cols="6" class="text-right">
 
@@ -192,7 +192,8 @@
                     <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
                         <v-btn id="fileInputButton" onclick="document.getElementById('rfileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel ">
                             <span v-if="!isaxiosupload">UPLOAD</span>
-                            <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                            <v-progress-circular indeterminate
+      color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
                         </v-btn>
 
                         <input id="rfileInput" type="file" @change="uploadImage($event, 'retake')" style="display:none" accept="image/*" />
@@ -200,7 +201,8 @@
                     <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
                         <v-btn style="font-weight: bold; background-color: #3c282f; color: white" @click="del(DialogPanelNo)" :disabled="!pictures || isaxiosupload || isaxiosdel">
                             <span v-if="!isaxiosdel">ERASE</span>
-                            <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                            <v-progress-circular indeterminate
+      color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -271,7 +273,8 @@
                 </div>
                 
 
-                <v-progress-circular size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                <v-progress-circular indeterminate
+      color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
             </v-btn>
 
             <input id="fileInput" type="file" @change="uploadImage" style="display:none" accept="image/*" />
@@ -824,12 +827,12 @@ export default {
           this.secondFloor = 0
           this.thirdFloor = 0
             for(let x= 0; x<this.tableContent.length;x++){
-              if(this.tableContent[x].PanelNo.includes('1S'))
+            //   if(this.tableContent[x].PanelNo.includes('1S'))
                 this.firstFloor = this.firstFloor+this.tableContent[x].count
-              else if(this.tableContent[x].PanelNo.includes('2S'))
-                this.secondFloor = this.secondFloor+this.tableContent[x].count
-              else
-                this.thirdFloor = this.thirdFloor+this.tableContent[x].count
+            //   else if(this.tableContent[x].PanelNo.includes('2S'))
+            //     this.secondFloor = this.secondFloor+this.tableContent[x].count
+            //   else
+            //     this.thirdFloor = this.thirdFloor+this.tableContent[x].count
             }
        
         },
