@@ -252,6 +252,7 @@ export default {
     },
 
     createCamera() {
+      this.isaxiosload = true;
       const constraints = (window.constraints = {
         audio: false,
         video: {
@@ -261,6 +262,7 @@ export default {
       navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
+          this.isaxiosload = false
           this.$refs.camera.srcObject = stream;
         })
         .catch((error) => {
