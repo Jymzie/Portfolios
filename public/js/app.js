@@ -3115,6 +3115,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 //
 //
 //
+//
+//
 
 
 
@@ -3571,6 +3573,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     // ANCHOR: getPanelNo
     getPanelNo: function getPanelNo() {
       var _this6 = this;
+      this.clkpanelact = 'fawf';
       this.mobileDialog = false;
       // this.isLoading=true;
       this.mRefreshImage();
@@ -3583,9 +3586,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         _this6.picContent = res.data;
         _this6.isLoading = false;
       })["finally"](function () {
-        setTimeout(function () {
-          _this6.clkpanelact = "";
-        }, 1000);
         _this6.tableContent = [{
           PanelNo: "1SAMP1",
           count: 0,
@@ -3619,6 +3619,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             }
           }
         }
+        setTimeout(function () {
+          _this6.clkpanelact = "";
+        }, 1000);
         _this6.floorComputation();
         _this6.loadingTable = false;
       });
@@ -22924,13 +22927,15 @@ var render = function () {
                                       style:
                                         item.count + 1 >= counter &&
                                         (item.finishFlag == null ||
-                                          item.finishFlag == 0)
+                                          item.finishFlag == 0) &&
+                                        _vm.clkpanelact == ""
                                           ? ""
                                           : "background-color:grey",
                                       on: {
                                         click: function ($event) {
                                           item.max >= counter &&
-                                          item["no" + counter] != null
+                                          item["no" + counter] != null &&
+                                          _vm.clkpanelact == ""
                                             ? _vm.openPictureDialog(
                                                 item,
                                                 item["no" + counter]

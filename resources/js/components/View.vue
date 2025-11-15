@@ -79,7 +79,8 @@
                     OpeningCam(item, counter, 'Capture')
               -->
                             <td v-for="(counter,k) in picCols" :key="k" @click="
-                              item.max >= counter && item['no'+counter] != null
+                              item.max >= counter && item['no'+counter] != null &&
+                                  clkpanelact == ''
                               ? openPictureDialog(item, item['no'+counter])
                                 : (item.max >= counter || item.count == counter-1) &&
                                   item['no'+counter] == null &&
@@ -90,7 +91,8 @@
 
                             " class="viewborder" :style="
                               item.count+1 >= counter &&
-                              (item.finishFlag == null || item.finishFlag == 0)
+                              (item.finishFlag == null || item.finishFlag == 0)&&
+                                  clkpanelact == ''
                               ? ''
                               : 'background-color:grey'
                             ">
@@ -828,6 +830,7 @@ export default {
         },
         // ANCHOR: getPanelNo
         getPanelNo() {
+            this.clkpanelact = 'fawf'
             this.mobileDialog = false
             // this.isLoading=true;
             this.mRefreshImage()
@@ -848,9 +851,7 @@ export default {
 
                 })
                 .finally(() => {
-                    setTimeout(() => {
-                        this.clkpanelact = "";
-                    }, 1000);
+                   
 
                     this.tableContent = [{
                             PanelNo: "1SAMP1",
@@ -894,6 +895,11 @@ export default {
                         }
 
                     }
+
+                     setTimeout(() => {
+                        this.clkpanelact = "";
+                    }, 1000);
+                  
                     this.floorComputation();
                     this.loadingTable = false;
 
