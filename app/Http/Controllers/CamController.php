@@ -55,11 +55,9 @@ class CamController extends Controller
        $success = 0;
 
         for($y=0; $y<$params->count;$y++){
-            // $image = file_get_contents($req['file'.$y]->getRealPath());
-           $image = Image::make($req['file'.$y]->getRealPath())->encode('jpg', 100)->orientate();
-    //        $image =Image::read($req['file'.$y]->getRealPath())
-    // ->encode(new JpegEncoder(100));
-    // ->autoOrient();
+            $image = file_get_contents($req['file'.$y]->getRealPath());
+        //    $image = Image::make($req['file'.$y]->getRealPath())->encode('jpg', 100)->orientate();
+
              if($params->isretake){
           
                 return Storage::disk('public')->put('images/'.$params->title, $image);
