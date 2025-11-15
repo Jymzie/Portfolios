@@ -41,11 +41,11 @@
 
     <v-row class="mt-1">
         <v-col>
-            <v-simple-table :height="$vuetify.breakpoint.height- 175 + 'px'" fixed-header class="my-n3 mt-n5" style="border: 1px solid black">
+            <v-simple-table :height="$vuetify.breakpoint.height- 175 + 'px'" fixed-header class="my-n3 mt-n5">
                 <thead>
                     <tr>
                         <th class="table-header">PANEL NO</th>
-                        <th v-for="(counter,l) in picCols" :key="l" class="table-header">{{counter}}</th>
+                        <th v-for="(counter,l) in picCols" :key="l" style="min-width:100px" class="table-header">{{counter}}</th>
                         <!-- <th class="table-header">ACTIONS</th> -->
                     </tr>
                 </thead>

@@ -22788,7 +22788,6 @@ var render = function () {
                 "v-simple-table",
                 {
                   staticClass: "my-n3 mt-n5",
-                  staticStyle: { border: "1px solid black" },
                   attrs: {
                     height: _vm.$vuetify.breakpoint.height - 175 + "px",
                     "fixed-header": "",
@@ -22806,7 +22805,11 @@ var render = function () {
                         _vm._l(_vm.picCols, function (counter, l) {
                           return _c(
                             "th",
-                            { key: l, staticClass: "table-header" },
+                            {
+                              key: l,
+                              staticClass: "table-header",
+                              staticStyle: { "min-width": "100px" },
+                            },
                             [_vm._v(_vm._s(counter))]
                           )
                         }),
