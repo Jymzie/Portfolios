@@ -3115,16 +3115,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -23061,8 +23051,7 @@ var render = function () {
       _c(
         "v-dialog",
         {
-          staticClass: "dialog",
-          attrs: { fixed: "", "content-class": "elevation-0" },
+          attrs: { fixed: "", "content-class": "elevation-0", fullscreen: "" },
           model: {
             value: _vm.pictureDialog,
             callback: function ($$v) {
@@ -23073,86 +23062,138 @@ var render = function () {
         },
         [
           _c(
-            "div",
-            { attrs: { align: "center", fixed: "" } },
+            "v-card",
+            {
+              staticStyle: {
+                display: "flex",
+                "align-items": "center",
+                "justify-content": "center",
+              },
+              style: "border-radius: 10px;border: 3px solid black; ",
+            },
             [
               _c(
-                "v-card",
-                {
-                  staticClass: "dialog position: center",
-                  style: _vm.isMobile
-                    ? "border-radius: 10px;border: 3px solid black;   width: 80vw;"
-                    : "border-radius: 10px;border: 3px solid black; width: 70vw;",
-                  attrs: { align: "center" },
-                },
+                "v-card-text",
                 [
-                  !_vm.isaxiosdel && !_vm.isaxiosupload
-                    ? _c(
-                        "v-row",
-                        { attrs: { dense: "" } },
-                        [
-                          _c(
-                            "v-col",
-                            {
-                              staticClass: "text-center",
-                              attrs: { cols: "12" },
-                            },
-                            [
-                              _c(
-                                "v-icon",
-                                {
-                                  staticClass: "mt-2",
-                                  attrs: {
-                                    fab: "",
-                                    size: "60px",
-                                    color: "red",
-                                  },
-                                  on: {
-                                    click: function ($event) {
-                                      ;(_vm.pictureDialog = false),
-                                        (_vm.pictures = true)
-                                    },
-                                  },
-                                },
-                                [
-                                  _vm._v(
-                                    "mdi-close-circle\r\n                        "
-                                  ),
-                                ]
-                              ),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
                   _c(
-                    "v-row",
-                    { attrs: { dense: "" } },
+                    "v-btn",
+                    {
+                      staticStyle: {
+                        position: "absolute",
+                        top: "3px",
+                        right: "3px",
+                      },
+                      attrs: {
+                        color: "red",
+                        "x-small": "",
+                        fab: "",
+                        disabled: _vm.isaxiosdel || _vm.isaxiosupload,
+                      },
+                      on: {
+                        click: function ($event) {
+                          ;(_vm.pictureDialog = false), (_vm.pictures = true)
+                        },
+                      },
+                    },
                     [
-                      _c("v-col", { attrs: { cols: "12", align: "center" } }, [
-                        _c("h1", [_vm._v(_vm._s(_vm.processItem.NameCode))]),
+                      _c("v-icon", { attrs: { color: "white" } }, [
+                        _vm._v("mdi-close"),
                       ]),
                     ],
                     1
                   ),
                   _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _vm.loading
+                      ? _c(
+                          "div",
+                          [
+                            _c("v-progress-circular", {
+                              attrs: {
+                                loading: "",
+                                size: 90,
+                                width: 20,
+                                color: "#3c282f",
+                                indeterminate: "",
+                              },
+                            }),
+                          ],
+                          1
+                        )
+                      : _c("div", { attrs: { align: "center" } }, [
+                          _vm.pictures
+                            ? _c("div", [
+                                _c("img", {
+                                  staticStyle: { "border-radius": "10px" },
+                                  style: _vm.isMobile
+                                    ? "height: 40vh; width: 40vw;"
+                                    : "height: 50vh; width: 50vw;",
+                                  attrs: {
+                                    src:
+                                      "images/" +
+                                      _vm.dialogItem.PanelNo +
+                                      "_" +
+                                      _vm.viewpageNO +
+                                      ".jpg?" +
+                                      _vm.timechange,
+                                  },
+                                }),
+                              ])
+                            : _c(
+                                "div",
+                                [
+                                  _c(
+                                    "span",
+                                    {
+                                      staticStyle: {
+                                        height: "40vh",
+                                        width: "40vw",
+                                      },
+                                    },
+                                    [_c("h1", [_vm._v("No Picture")])]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-icon",
+                                    {
+                                      staticStyle: { cursor: "pointer" },
+                                      attrs: { "x-large": "" },
+                                      on: {
+                                        click: function ($event) {
+                                          !_vm.isMobile
+                                            ? _vm.OpeningCam(
+                                                _vm.dialogItem,
+                                                _vm.viewpageNO,
+                                                "Capture"
+                                              )
+                                            : ""
+                                        },
+                                      },
+                                    },
+                                    [_vm._v("mdi-camera")]
+                                  ),
+                                ],
+                                1
+                              ),
+                        ]),
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "v-row",
-                    { attrs: { dense: "" } },
+                    {
+                      staticClass: "my-n2 mb-n4",
+                      staticStyle: {
+                        display: "flex",
+                        "justify-content": "center",
+                        padding: "0",
+                        margin: "0",
+                      },
+                      attrs: { dense: "" },
+                    },
                     [
                       _c(
                         "v-col",
-                        {
-                          staticStyle: {
-                            "max-width": "80px",
-                            height: "40vh",
-                            "padding-top": "130px",
-                          },
-                          attrs: { cols: "1", align: "left" },
-                        },
+                        { staticClass: "text-left", attrs: { cols: "4" } },
                         [
                           _c(
                             "v-icon",
@@ -23161,12 +23202,13 @@ var render = function () {
                                 color: "black",
                                 cursor: "pointer",
                                 "max-width": "65px",
-                                "text-align": "center",
                               },
                               attrs: {
                                 disabled:
                                   _vm.dialogItem.PicNO == 1 || _vm.loading,
-                                size: "100px",
+                                size: _vm.$vuetify.breakpoint.smAndUp
+                                  ? "80"
+                                  : "",
                               },
                               on: {
                                 click: function ($event) {
@@ -23180,88 +23222,40 @@ var render = function () {
                         1
                       ),
                       _vm._v(" "),
-                      _vm.loading
-                        ? _c(
-                            "v-col",
-                            [
-                              _c("v-progress-circular", {
-                                attrs: {
-                                  loading: "",
-                                  size: 90,
-                                  width: 20,
-                                  color: "#3c282f",
-                                  indeterminate: "",
-                                },
-                              }),
-                            ],
-                            1
-                          )
-                        : _c("v-col", { attrs: { align: "center" } }, [
-                            _vm.pictures
-                              ? _c("div", [
-                                  _c("img", {
-                                    style: _vm.isMobile
-                                      ? "height: 40vh; width: 40vw;"
-                                      : "height: 50vh; width: 50vw;",
-                                    attrs: {
-                                      src:
-                                        "images/" +
-                                        _vm.dialogItem.PanelNo +
-                                        "_" +
-                                        _vm.viewpageNO +
-                                        ".jpg?" +
-                                        _vm.timechange,
-                                    },
-                                  }),
-                                ])
-                              : _c(
-                                  "div",
-                                  [
-                                    _c(
-                                      "span",
-                                      {
-                                        staticStyle: {
-                                          height: "40vh",
-                                          width: "40vw",
-                                        },
-                                      },
-                                      [_c("h1", [_vm._v("No Picture")])]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-icon",
-                                      {
-                                        staticStyle: { cursor: "pointer" },
-                                        attrs: { "x-large": "" },
-                                        on: {
-                                          click: function ($event) {
-                                            !_vm.isMobile
-                                              ? _vm.OpeningCam(
-                                                  _vm.dialogItem,
-                                                  _vm.viewpageNO,
-                                                  "Capture"
-                                                )
-                                              : ""
-                                          },
-                                        },
-                                      },
-                                      [_vm._v("mdi-camera")]
-                                    ),
-                                  ],
-                                  1
-                                ),
-                          ]),
-                      _vm._v(" "),
                       _c(
                         "v-col",
                         {
                           staticStyle: {
-                            "max-width": "80px",
-                            height: "40vh",
-                            "padding-top": "130px",
+                            display: "flex",
+                            "align-items": "center",
+                            "justify-content": "center",
                           },
-                          attrs: { cols: "1", align: "right" },
+                          attrs: { cols: "4" },
                         },
+                        [
+                          _c("div", [
+                            _vm.$vuetify.breakpoint.smAndUp
+                              ? _c("h1", [
+                                  _vm._v(
+                                    _vm._s(_vm.dialogItem.PanelNo) +
+                                      "_" +
+                                      _vm._s(_vm.dialogItem.PicNO)
+                                  ),
+                                ])
+                              : _c("h2", [
+                                  _vm._v(
+                                    _vm._s(_vm.dialogItem.PanelNo) +
+                                      "_" +
+                                      _vm._s(_vm.dialogItem.PicNO)
+                                  ),
+                                ]),
+                          ]),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { staticClass: "text-right", attrs: { cols: "4" } },
                         [
                           _c(
                             "v-icon",
@@ -23270,14 +23264,15 @@ var render = function () {
                                 color: "black",
                                 cursor: "pointer",
                                 "max-width": "65px",
-                                "text-align": "center",
                               },
                               attrs: {
                                 disabled:
                                   _vm.dialogItem.PicNO == 8 ||
                                   _vm.viewpageNO == _vm.lastPic ||
                                   _vm.loading,
-                                size: "100",
+                                size: _vm.$vuetify.breakpoint.smAndUp
+                                  ? "80"
+                                  : "",
                               },
                               on: {
                                 click: function ($event) {
@@ -23296,15 +23291,11 @@ var render = function () {
                   _vm._v(" "),
                   _c(
                     "v-row",
-                    {
-                      staticClass: "justify-center",
-                      attrs: { align: "center" },
-                    },
+                    { staticClass: "justify-center" },
                     [
                       _c(
                         "v-col",
                         {
-                          staticClass: "justify-space-between",
                           attrs: {
                             cols: "auto",
                             sm: "auto",
@@ -23339,7 +23330,7 @@ var render = function () {
                             },
                             [
                               _vm._v(
-                                "\r\n                            RETAKE\r\n                        "
+                                "\r\n                                    RETAKE\r\n                                "
                               ),
                             ]
                           ),
@@ -23350,7 +23341,6 @@ var render = function () {
                       _c(
                         "v-col",
                         {
-                          staticClass: "justify-space-between",
                           attrs: {
                             cols: "auto",
                             sm: "auto",
@@ -23412,7 +23402,6 @@ var render = function () {
                       _c(
                         "v-col",
                         {
-                          staticClass: "justify-space-between",
                           attrs: {
                             cols: "auto",
                             sm: "auto",
@@ -23461,39 +23450,14 @@ var render = function () {
                     ],
                     1
                   ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    {
-                      staticClass: "justify-center",
-                      attrs: { align: "center" },
-                    },
-                    [
-                      _c(
-                        "v-col",
-                        {
-                          attrs: { sm: "3", md: "3", lg: "3", align: "center" },
-                        },
-                        [_c("h1", [_vm._v(_vm._s(_vm.dialogItem.PanelNo))])]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        {
-                          attrs: { sm: "3", md: "3", lg: "3", align: "center" },
-                        },
-                        [_c("h1", [_vm._v(_vm._s(_vm.dialogItem.PicNO))])]
-                      ),
-                    ],
-                    1
-                  ),
                 ],
                 1
               ),
             ],
             1
           ),
-        ]
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
@@ -23617,7 +23581,7 @@ var render = function () {
       _c(
         "v-dialog",
         {
-          attrs: { width: "400px", height: "350px", persistent: "" },
+          attrs: { width: "400px", height: "450px", persistent: "" },
           model: {
             value: _vm.mobileDialog,
             callback: function ($$v) {
@@ -23631,41 +23595,39 @@ var render = function () {
             "v-card",
             { staticClass: "pa-3", attrs: { align: "center" } },
             [
-              !_vm.isaxiosupload
-                ? _c(
-                    "v-row",
-                    { staticClass: "mb-2", attrs: { dense: "" } },
-                    [
-                      _c(
-                        "v-col",
-                        { staticClass: "text-center", attrs: { cols: "12" } },
-                        [
-                          _c(
-                            "v-icon",
-                            {
-                              staticClass: "mt-2",
-                              attrs: { fab: "", size: "60px", color: "red" },
-                              on: {
-                                click: function ($event) {
-                                  ;(_vm.mobileDialog = false),
-                                    (_vm.pictures = true)
-                                },
-                              },
-                            },
-                            [_vm._v("mdi-close-circle\r\n                    ")]
-                          ),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  )
-                : _vm._e(),
+              _c(
+                "v-btn",
+                {
+                  staticStyle: {
+                    position: "absolute",
+                    top: "3px",
+                    right: "3px",
+                  },
+                  attrs: {
+                    color: "red",
+                    "x-small": "",
+                    fab: "",
+                    disabled: _vm.isaxiosupload,
+                  },
+                  on: {
+                    click: function ($event) {
+                      ;(_vm.mobileDialog = false), (_vm.pictures = true)
+                    },
+                  },
+                },
+                [
+                  _c("v-icon", { attrs: { color: "white" } }, [
+                    _vm._v("mdi-close"),
+                  ]),
+                ],
+                1
+              ),
               _vm._v(" "),
               _vm.param && _vm.param.length > 0
                 ? _c(
                     "v-btn",
                     {
+                      staticClass: "my-1",
                       attrs: {
                         disabled: _vm.isaxiosupload,
                         "x-large": "",
@@ -23696,6 +23658,7 @@ var render = function () {
               _c(
                 "v-btn",
                 {
+                  staticClass: "my-1",
                   staticStyle: {
                     "font-weight": "bold",
                     "background-color": "#3c282f",

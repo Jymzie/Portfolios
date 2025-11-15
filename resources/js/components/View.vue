@@ -125,97 +125,97 @@
     </v-row>
 
     <!--NOTE Dialog for ViewPicture -->
-    <v-dialog v-model="pictureDialog" fixed class="dialog" content-class="elevation-0">
-        <div align="center" fixed>
-            <v-card align="center" :style="
-            isMobile
-              ? 'border-radius: 10px;border: 3px solid black;   width: 80vw;'
-              : 'border-radius: 10px;border: 3px solid black; width: 70vw;'
-          " class="dialog position: center">
-                <v-row dense v-if="!isaxiosdel && !isaxiosupload">
-                    <v-col cols="12" class="text-center">
-                        <v-icon class="mt-2" fab size="60px" color="red" @click="(pictureDialog = false), (pictures = true)">mdi-close-circle
-                        </v-icon>
-                    </v-col>
-                </v-row>
-                <v-row dense>
-                    <v-col cols="12" align="center">
-                        <h1>{{ processItem.NameCode }}</h1>
-                    </v-col>
-                </v-row>
-                <!-- {{ dialogItem }} -->
+    <v-dialog v-model="pictureDialog" fixed  content-class="elevation-0" fullscreen>
+      
+            <v-card style="display: flex; align-items: center; justify-content: center;" :style="
+            'border-radius: 10px;border: 3px solid black; '
+          " >
+                <v-card-text>
+                    
+                        <v-btn color="red" x-small fab :disabled="isaxiosdel || isaxiosupload" @click="(pictureDialog = false), (pictures = true)" style="position:absolute; top:3px;right:3px">
+                            <v-icon color="white" >mdi-close</v-icon>
+                        </v-btn>
 
-                <v-row dense>
-                    <v-col cols="1" align="left" style="max-width: 80px; height: 40vh; padding-top: 130px">
-                        <v-icon @click="Previous()" :disabled="dialogItem.PicNO == 1 || loading" style="color: black; cursor: pointer; max-width: 65px; text-align: center" size="100px">mdi-menu-left</v-icon>
-                    </v-col>
+                        <!-- NOTE pic preview  -->
+                        <div class="mt-2" >
+                               <div v-if="loading">
+                                <v-progress-circular loading :size="90" :width="20" color="#3c282f" indeterminate></v-progress-circular>
+                            </div>
+                            <div v-else align="center">
+                                <div v-if="pictures">
 
-                    <v-col v-if="loading">
-                        <v-progress-circular loading :size="90" :width="20" color="#3c282f" indeterminate></v-progress-circular>
-                    </v-col>
-                    <v-col v-else align="center">
-                        <div v-if="pictures">
-
-                            <img :style="
-                    isMobile ? 'height: 40vh; width: 40vw;' : 'height: 50vh; width: 50vw;'
-                  " :src="
-                    'images/'+
-                    dialogItem.PanelNo +
-                    '_' +
-                    viewpageNO +
-                    '.jpg?' +
-                    timechange
-                  " />
+                                    <img style='border-radius: 10px' :style="
+                                        isMobile ? 'height: 40vh; width: 40vw;' : 'height: 50vh; width: 50vw;'
+                                    " :src="
+                                        'images/'+
+                                        dialogItem.PanelNo +
+                                        '_' +
+                                        viewpageNO +
+                                        '.jpg?' +
+                                        timechange
+                                    " />
+                                </div>
+                                <div v-else>
+                                    <span style="height: 40vh; width: 40vw">
+                                        <h1>No Picture</h1>
+                                    </span>
+                                    <v-icon style="cursor: pointer" @click="!isMobile ? OpeningCam(dialogItem, viewpageNO, 'Capture') : ''" x-large>mdi-camera</v-icon>
+                                </div>
+                            </div>
                         </div>
-                        <div v-else>
-                            <span style="height: 40vh; width: 40vw">
-                                <h1>No Picture</h1>
-                            </span>
-                            <v-icon style="cursor: pointer" @click="!isMobile ? OpeningCam(dialogItem, viewpageNO, 'Capture') : ''" x-large>mdi-camera</v-icon>
-                        </div>
-                    </v-col>
+                        
+                        <!-- NOTE next prev  -->
+                        <v-row dense style="display: flex;justify-content: center; padding:0;margin:0" class="my-n2 mb-n4" >
+                            <v-col cols="4" class="text-left">
+                                <v-icon @click="Previous()" :disabled="dialogItem.PicNO == 1 || loading" style="color: black; cursor: pointer; max-width: 65px; " :size="$vuetify.breakpoint.smAndUp ? '80':''">mdi-menu-left</v-icon>
+                            </v-col>
+                              <v-col cols="4" style="display: flex; align-items: center; justify-content: center;">
+                                <div >
+                                   
+                                    <h1 v-if="$vuetify.breakpoint.smAndUp">{{ dialogItem.PanelNo }}_{{dialogItem.PicNO }}</h1>
+                                    <h2 v-else>{{ dialogItem.PanelNo }}_{{dialogItem.PicNO }}</h2>
+                                </div>
+                              </v-col>
 
-                    <v-col cols="1" align="right" style="max-width: 80px; height: 40vh; padding-top: 130px">
-                        <v-icon @click="Next()" :disabled="dialogItem.PicNO == 8 || viewpageNO == lastPic || loading" style="color: black; cursor: pointer; max-width: 65px; text-align: center" size="100">mdi-menu-right</v-icon>
-                    </v-col>
-                </v-row>
 
-                <v-row align="center" class="justify-center">
-                    <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
-                        <v-btn @click="OpeningCam(DialogPanelNo+'.jpg', 1, 'Retake')" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel">
-                            RETAKE
-                        </v-btn>
+                            <v-col cols="4" class="text-right">
+                                <v-icon @click="Next()" :disabled="dialogItem.PicNO == 8 || viewpageNO == lastPic || loading" style="color: black; cursor: pointer; max-width: 65px; " :size="$vuetify.breakpoint.smAndUp ? '80':''">mdi-menu-right</v-icon>
+                            </v-col>
+                        </v-row>
 
-                    </v-col>
+                        <!-- NOTE button options  -->
 
-                    <!-- Upload Button -->
-                    <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
-                        <v-btn id="fileInputButton" onclick="document.getElementById('rfileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel ">
-                            <span v-if="!isaxiosupload">UPLOAD</span>
-                            <v-progress-circular indeterminate
-      color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
-                        </v-btn>
+                        <v-row class="justify-center">
+                            <v-col cols="auto" sm="auto" md="auto" lg="2" >
+                                <v-btn @click="OpeningCam(DialogPanelNo+'.jpg', 1, 'Retake')" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel">
+                                    RETAKE
+                                </v-btn>
 
-                        <input id="rfileInput" type="file" @change="uploadImage($event, 'retake')" style="display:none" accept="image/*" />
-                    </v-col>
-                    <v-col cols="auto" sm="auto" md="auto" lg="2" class="justify-space-between">
-                        <v-btn style="font-weight: bold; background-color: #3c282f; color: white" @click="del(DialogPanelNo)" :disabled="!pictures || isaxiosupload || isaxiosdel">
-                            <span v-if="!isaxiosdel">ERASE</span>
-                            <v-progress-circular indeterminate
-      color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
-                        </v-btn>
-                    </v-col>
-                </v-row>
-                <v-row align="center" class="justify-center">
-                    <v-col sm="3" md="3" lg="3" align="center">
-                        <h1>{{ dialogItem.PanelNo }}</h1>
-                    </v-col>
-                    <v-col sm="3" md="3" lg="3" align="center">
-                        <h1>{{ dialogItem.PicNO }}</h1>
-                    </v-col>
-                </v-row>
+                            </v-col>
+
+                            <!-- Upload Button -->
+                            <v-col cols="auto" sm="auto" md="auto" lg="2" >
+                                <v-btn id="fileInputButton" onclick="document.getElementById('rfileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" :disabled="!pictures || isaxiosupload || isaxiosdel ">
+                                    <span v-if="!isaxiosupload">UPLOAD</span>
+                                    <v-progress-circular indeterminate
+            color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                                </v-btn>
+
+                                <input id="rfileInput" type="file" @change="uploadImage($event, 'retake')" style="display:none" accept="image/*" />
+                            </v-col>
+                            <v-col cols="auto" sm="auto" md="auto" lg="2" >
+                                <v-btn style="font-weight: bold; background-color: #3c282f; color: white" @click="del(DialogPanelNo)" :disabled="!pictures || isaxiosupload || isaxiosdel">
+                                    <span v-if="!isaxiosdel">ERASE</span>
+                                    <v-progress-circular indeterminate
+            color="primary" size='30' style="padding: 0;margin: 0;" v-else ></v-progress-circular>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    
+                </v-card-text>
+              
             </v-card>
-        </div>
+       
     </v-dialog>
 
     <!-- NOTE Dialog for preview -->
@@ -241,32 +241,22 @@
     <!-- Jea -->
     <!-- NOTE: Mobile v-dialog -->
     <!-- Gives the user an option whether to capture an image or upload -->
-    <v-dialog v-model="mobileDialog" width="400px" height="350px" persistent>
+    <v-dialog v-model="mobileDialog" width="400px" height="450px" persistent>
 
         <v-card align="center" class="pa-3">
-            <v-row dense class="mb-2" v-if="!isaxiosupload">
-                <v-col cols="12" class="text-center">
-                    <v-icon class="mt-2" fab size="60px" color="red" @click="(mobileDialog = false), (pictures = true)">mdi-close-circle
-                    </v-icon>
-                </v-col>
-            </v-row>
+           
 
-            <v-btn :disabled="isaxiosupload" v-if="(param && param.length > 0)" x-large color="primary" width="150px" height="60px" elevation="2" depressed @click="OpeningCam(param[0],param[1],param[2])">
+            <v-btn color="red" x-small fab :disabled="isaxiosupload" @click="(mobileDialog = false), (pictures = true)" style="position:absolute; top:3px;right:3px">
+                <v-icon color="white" >mdi-close</v-icon>
+            </v-btn>
+
+            <v-btn class="my-1" :disabled="isaxiosupload" v-if="(param && param.length > 0)" x-large color="primary" width="150px" height="60px" elevation="2" depressed @click="OpeningCam(param[0],param[1],param[2])">
                 <!-- id="fileInputButton" onclick="document.getElementById('filecapture').click()"  -->
                 <v-icon>mdi-camera</v-icon>
                 Capture
             </v-btn>
-            <!-- <input 
-            id="filecapture" 
-            type="file" 
-            @change="uploadImage"
-            style="display:none"
-            accept="image/*"
-            capture="true"
-
-          /> -->
-            <!-- v-if="isMobile" -->
-            <v-btn :disabled="isaxiosupload" color="primary" width="150px" height="60px" elevation="2" depressed id="fileInputButton" onclick="document.getElementById('fileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" left>
+     
+            <v-btn class="my-1" :disabled="isaxiosupload" color="primary" width="150px" height="60px" elevation="2" depressed id="fileInputButton" onclick="document.getElementById('fileInput').click()" style="font-weight: bold; background-color: #3c282f; color: white" left>
                 <div v-if="!isaxiosupload">
                     <v-icon>mdi-upload</v-icon>
                     Upload
