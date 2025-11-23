@@ -44,7 +44,7 @@
             <v-simple-table :height="$vuetify.breakpoint.height- 175 + 'px'" fixed-header class="my-n3 mt-n5">
                 <thead>
                     <tr>
-                        <th class="table-header">PANEL NO</th>
+                        <th style="min-width:120px" class="table-header">PANEL NO</th>
                         <th v-for="(counter,l) in picCols" :key="l" style="min-width:100px" class="table-header">{{counter}}</th>
                         <!-- <th class="table-header">ACTIONS</th> -->
                     </tr>
@@ -307,32 +307,7 @@ export default {
         show: false,
         previewdialog: false,
         processItem: {},
-        tableContent: [{
-                PanelNo: "1SAMP1",
-                count: 0,
-                max: 0
-            },
-            {
-                PanelNo: "1SAMP2",
-                count: 0,
-                max: 0
-            },
-            {
-                PanelNo: "2SAMP1",
-                count: 0,
-                max: 0
-            },
-            {
-                PanelNo: "2SAMP2",
-                count: 0,
-                max: 0
-            },
-            {
-                PanelNo: "3SAMP1",
-                count: 0,
-                max: 0
-            },
-        ],
+        tableContent: [],
         picContent: [],
         tdIndex: null,
         firstFloor: 0,
@@ -854,27 +829,27 @@ export default {
                    
 
                     this.tableContent = [{
-                            PanelNo: "1SAMP1",
+                            PanelNo: "EX_001",
                             count: 0,
                             max: 0
                         },
                         {
-                            PanelNo: "1SAMP2",
+                            PanelNo: "EX_002",
                             count: 0,
                             max: 0
                         },
                         {
-                            PanelNo: "2SAMP1",
+                            PanelNo: "EX_003",
                             count: 0,
                             max: 0
                         },
                         {
-                            PanelNo: "2SAMP2",
+                            PanelNo: "EX_004",
                             count: 0,
                             max: 0
                         },
                         {
-                            PanelNo: "3SAMP1",
+                            PanelNo: "EX_005",
                             count: 0,
                             max: 0
                         },
