@@ -2740,8 +2740,8 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     sCanvas: function sCanvas() {
       return {
-        width: this.$vuetify.breakpoint.width - 50 + 'px',
-        height: this.$vuetify.breakpoint.height - 60 + 'px'
+        minwidth: this.$vuetify.breakpoint.width - 50 + 'px',
+        minheight: this.$vuetify.breakpoint.height - 60 + 'px'
       };
     }
   },
@@ -23542,7 +23542,7 @@ var render = function () {
                       ],
                       ref: "canvas",
                       staticClass: "video",
-                      style: _vm.sCanvas(),
+                      style: _vm.sCanvas,
                       attrs: { id: "photoTaken" },
                     }),
                     _vm._v(" "),
