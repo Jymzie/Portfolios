@@ -155,12 +155,12 @@ export default {
       this.isPhotoTaken = !this.isPhotoTaken;
       const ctx = this.$refs.canvas.getContext("2d");
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      let newWidth = 3264 ,
-        newHeight = 2448;
+      let newWidth = 1920  ,
+        newHeight = 1080;
       
       if(this.ischangeorientation){
-        newWidth = 2448,
-        newHeight = 3264;
+        newWidth = 1080,
+        newHeight = 1920 ;
       }
         
       ctx.canvas.width = newWidth;
