@@ -17,7 +17,7 @@
               class="video"
               id="photoTaken"
               ref="canvas"
-              :style="sCanvas"
+              :style="sCanvas()"
             />
             <v-btn
               fab
@@ -131,8 +131,8 @@ export default {
   methods: {
     sCanvas(){
       return {
-        width: this.$vuetify.breakpoint.width-50 + 'px',
-        height: this.$vuetify.breakpoint.height - 60 + 'px'
+        minwidth: this.$vuetify.breakpoint.width-50 + 'px',
+        minheight: this.$vuetify.breakpoint.height - 60 + 'px'
       }
     },
     detectOrientation() {
