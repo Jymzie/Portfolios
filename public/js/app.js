@@ -2858,10 +2858,10 @@ __webpack_require__.r(__webpack_exports__);
         video: {
           facingMode: "environment",
           "width": {
-            "ideal": 3264
+            "ideal": 1920
           },
           "height": {
-            "ideal": 2448
+            "ideal": 1080
           }
         }
       };
