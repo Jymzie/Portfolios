@@ -155,13 +155,16 @@ export default {
       this.isPhotoTaken = !this.isPhotoTaken;
       const ctx = this.$refs.canvas.getContext("2d");
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      let newWidth = 1920  ,
-        newHeight = 1080;
+
+      let newWidth = this.$vuetify.breakpoint.width-50  ,
+        newHeight = this.$vuetify.breakpoint.height - 60;
+      // let newWidth = 1920  ,
+      //   newHeight = 1080;
       
-      if(this.ischangeorientation){
-        newWidth = 1080,
-        newHeight = 1920 ;
-      }
+      // if(this.ischangeorientation){
+      //   newWidth = 1080,
+      //   newHeight = 1920 ;
+      // }
         
       ctx.canvas.width = newWidth;
       ctx.canvas.height = newHeight;
