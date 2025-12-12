@@ -2740,8 +2740,8 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     sCanvas: function sCanvas() {
       return {
-        minwidth: this.$vuetify.breakpoint.width - 50 + 'px',
-        minheight: this.$vuetify.breakpoint.height - 60 + 'px'
+        width: this.$vuetify.breakpoint.width - 50 + 'px',
+        height: this.$vuetify.breakpoint.height - 60 + 'px'
       };
     }
   },

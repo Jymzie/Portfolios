@@ -132,8 +132,8 @@ export default {
   computed: {
     sCanvas(){
       return {
-        minwidth: this.$vuetify.breakpoint.width-50 + 'px',
-        minheight: this.$vuetify.breakpoint.height - 60 + 'px'
+        width: this.$vuetify.breakpoint.width-50 + 'px',
+        height: this.$vuetify.breakpoint.height - 60 + 'px'
       }
     },
   },
