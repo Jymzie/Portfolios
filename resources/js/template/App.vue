@@ -33,6 +33,11 @@ export default {
                 to: 'View'
             },
             {
+                text: 'Balcony Handrail',
+                icon: 'mdi-check',
+                to: 'Plan'
+            },
+            {
                 text: 'AccessManager',
                 icon: 'mdi-lock',
                 to: 'AccessManager'

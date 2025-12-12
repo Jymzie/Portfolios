@@ -17,8 +17,7 @@
               class="video"
               id="photoTaken"
               ref="canvas"
-              :width="$vuetify.breakpoint.width-50 + 'px'"
-              :height="$vuetify.breakpoint.height - 60 + 'px'"
+              :style="sCanvas"
             />
             <v-btn
               fab
@@ -130,6 +129,12 @@ export default {
     },
   },
   methods: {
+    sCanvas(){
+      return {
+        width: this.$vuetify.breakpoint.width-50 + 'px',
+        height: this.$vuetify.breakpoint.height - 60 + 'px'
+      }
+    },
     detectOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
       this.$emit("orientationChange", isPortrait);
@@ -146,8 +151,14 @@ export default {
       this.isPhotoTaken = !this.isPhotoTaken;
       const ctx = this.$refs.canvas.getContext("2d");
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      let newWidth = this.$vuetify.breakpoint.width-50,
-        newHeight = this.$vuetify.breakpoint.height-60;
+      let newWidth = 3264 ,
+        newHeight = 2448;
+      
+      if(this.ischangeorientation){
+        newWidth = 2448,
+        newHeight = 3264;
+      }
+        
       ctx.canvas.width = newWidth;
       ctx.canvas.height = newHeight;
       ctx.drawImage(this.$refs.camera, 0, 0, newWidth, newHeight); //portrait camera
@@ -257,6 +268,12 @@ export default {
         audio: false,
         video: {
           facingMode: "environment",
+           "width": {
+              "ideal": 3264
+            },
+            "height": {
+              "ideal": 2448
+            }
         },
       });
       navigator.mediaDevices
