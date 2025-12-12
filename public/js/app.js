@@ -2737,13 +2737,15 @@ __webpack_require__.r(__webpack_exports__);
       } else this.buksancam = false;
     }
   },
-  methods: {
+  computed: {
     sCanvas: function sCanvas() {
       return {
-        minwidth: this.$vuetify.breakpoint.width - 50 + 'px',
-        minheight: this.$vuetify.breakpoint.height - 60 + 'px'
+        width: this.$vuetify.breakpoint.width - 50 + 'px',
+        height: this.$vuetify.breakpoint.height - 60 + 'px'
       };
-    },
+    }
+  },
+  methods: {
     detectOrientation: function detectOrientation() {
       var isPortrait = window.matchMedia("(orientation: portrait)").matches;
       this.$emit("orientationChange", isPortrait);

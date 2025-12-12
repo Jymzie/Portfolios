@@ -128,13 +128,17 @@ export default {
         this.buksancam = false
     },
   },
-  methods: {
+
+  computed: {
     sCanvas(){
       return {
-        minwidth: this.$vuetify.breakpoint.width-50 + 'px',
-        minheight: this.$vuetify.breakpoint.height - 60 + 'px'
+        width: this.$vuetify.breakpoint.width-50 + 'px',
+        height: this.$vuetify.breakpoint.height - 60 + 'px'
       }
     },
+  },
+  methods: {
+   
     detectOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
       this.$emit("orientationChange", isPortrait);
