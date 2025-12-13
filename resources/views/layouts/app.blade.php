@@ -6,6 +6,7 @@
  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
  <link rel="stylesheet" href="{{asset('css/app.css')}} ">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="icon" type="image/x-icon" href="images/jlogo.webp">
  <title>Portfolios</title>
 </head>
 <body>

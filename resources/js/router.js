@@ -5,10 +5,14 @@ import Home from './components/Home'
 import View from './components/View'
 import Plan from './components/Plan'
 import AccessManager from './components/AccessManager'
-export default new VueRouter({
+let router = new VueRouter({
  mode: 'history',
  routes: [
-
+ {
+ path: '/',
+ name: 'Home',
+ component: Home
+ } ,
   {
  path: '/View',
  name: 'View',
@@ -26,3 +30,16 @@ export default new VueRouter({
  } ,
  ],
 } );
+
+
+router.beforeEach((to, from, next) =>{
+    if(to.name == null){
+        next({name: 'Home'})
+    }
+    else{
+      next()  
+    }
+})
+
+
+export default router

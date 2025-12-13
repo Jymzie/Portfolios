@@ -180,7 +180,7 @@
         </v-row>
 
     </v-container>
-    <v-dialog v-model="ConfirmationDialog" persistent width="30%">
+    <v-dialog v-model="ConfirmationDialog" persistent :fullscreen="$vuetify.breakpoint.xsOnly" :width="$vuetify.breakpoint.xsOnly ? '':$vuetify.breakpoint.mdOnly ? '40%': $vuetify.breakpoint.smOnly ? '50%':'30%'">
         <v-card>
             <v-card-title>
                 <h4>For Confirmation Log</h4>

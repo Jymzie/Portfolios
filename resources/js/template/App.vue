@@ -15,10 +15,11 @@
     </v-navigation-drawer>
     <v-app-bar app clipped-left style="z-index: 99;">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-toolbar-title>Portfolios</v-toolbar-title>
+        <img src="images/jlogo.webp" style="border-radius: 10px;height: 50px;cursor: pointer;" @click="$router.push('/')"/>
+       <v-toolbar-title @click="$router.push('/')" style="position: absolute; left:83px; display: inline-block;font-style: italic;text-shadow: 0px 0px 4px #FFFFFF;width: 210px; cursor: pointer;">'s Portfolio</v-toolbar-title>
     </v-app-bar>
     <v-main class="ma-2">
-        <router-view></router-view>
+        <router-view style="min-width:400px"></router-view>
     </v-main>
 </v-app>
 </template>
