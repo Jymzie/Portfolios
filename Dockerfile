@@ -2,7 +2,7 @@ FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl unzip libpq-dev libonig-dev libzip-dev zip zlib1g-dev\
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     libexif-dev \  
     libicu-dev \
@@ -18,7 +18,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-zip
 
 # Laravel setup
 RUN php artisan config:clear && \
