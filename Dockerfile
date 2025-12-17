@@ -7,9 +7,10 @@ RUN apt-get update && apt-get install -y \
     libexif-dev \
     && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install gd exif \
-    && docker-php-ext-install  php-mbstring
+    && docker-php-ext-install zip xml simplexml xmlreader iconv zlib mbstring
+
 # Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
