@@ -4,9 +4,10 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y \
     git curl unzip libpq-dev libonig-dev libzip-dev zip \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
-    libexif-dev \  
+    libexif-dev libicu-dev \
     && docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install gd exif  
+    && docker-php-ext-install gd exif pdo_mysql pdo_pgsql \
+    intl zip bcmath opcache soap
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
