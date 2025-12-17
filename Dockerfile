@@ -4,11 +4,11 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y \
     git curl unzip libpq-dev libonig-dev libzip-dev zip \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
-    libexif-dev \
-    # Required for PhpSpreadsheet (Maatwebsite)
-    libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd exif zip bcmath intl
+    libexif-dev \  
+    libicu-dev \
+    && docker-php-ext-configure gd --with-jpeg \
+    && docker-php-ext-install gd exif \
+    && rm -rf /var/lib/apt/lists/*
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
