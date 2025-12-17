@@ -1,0 +1,56 @@
+@import '~vuetify/dist/vuetify.min.css';
+@import '~@mdi/font/css/materialdesignicons.css';
+@import 'izitoast/dist/css/iziToast.min.css';
+
+/*hide vertical scrollbar*/
+html::-webkit-scrollbar { display: none; }
+#inspire{
+    overflow-x:auto;
+}
+
+.Beigecover{
+    background-color:#e9c9aa;
+}
+.marbeige{
+    background-color: #5a0a0a !important;
+    color: #e9c9aa !important;
+}
+
+.Beigetext{
+    color:#e9c9aa;
+}
+
+.Marooncover{
+    background-color:#5a0a0a;
+}
+
+.Maroontext{
+    color:#5a0a0a;
+}
+
+.Titlesize{
+    font-size: 25px;
+}
+
+.Subtitlesize{
+    font-size: 20px;
+}
+
+.buttonsmcaps{
+    text-transform: none;
+}
+
+.v-data-table tbody tr td {
+    border: 1px solid;
+    height: 100% !important;
+    white-space: nowrap;
+  }
+
+.square{
+    border: 1px solid;
+}
+/* 
+.lowcell{
+    height: 100% !important;
+    white-space: nowrap;
+} */

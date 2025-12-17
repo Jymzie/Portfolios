@@ -2,8 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 import Home from './components/Home'
-import View from './components/View'
-import Plan from './components/Plan'
+import NPS from './components/NPS'
+import BHM from './components/BHM'
+import HPS from './components/HPS'
+import ID from './components/ID'
 import AccessManager from './components/AccessManager'
 let router = new VueRouter({
  mode: 'history',
@@ -14,14 +16,24 @@ let router = new VueRouter({
  component: Home
  } ,
   {
- path: '/View',
- name: 'View',
- component: View
+ path: '/NPS',
+ name: 'NPS',
+ component: NPS
  } ,
   {
- path: '/Plan',
- name: 'Plan',
- component: Plan
+ path: '/BHM',
+ name: 'BHM',
+ component: BHM
+ } ,
+  {
+ path: '/ID',
+ name: 'ID',
+ component: ID
+ } ,
+   {
+ path: '/HPS',
+ name: 'HPS',
+ component: HPS
  } ,
   {
  path: '/AccessManager',

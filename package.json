@@ -18,10 +18,12 @@
     "dependencies": {
         "@mdi/font": "^6.4.95",
         "vue": "^2.6.14",
+        "vue-izitoast": "^1.2.1",
         "vue-loader": "^15.9.8",
         "vue-router": "^3.5.3",
         "vue-sweetalert2": "^5.0.11",
         "vue-template-compiler": "^2.6.14",
+        "vue2-datepicker": "^3.11.1",
         "vuetify": "^2.6.2",
         "vuex": "^3.6.2",
         "vuex-persistedstate": "^4.1.0"

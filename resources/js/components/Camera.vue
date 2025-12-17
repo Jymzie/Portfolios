@@ -269,30 +269,88 @@ export default {
           
     },
 
-    createCamera() {
-      this.isaxiosload = true;
+        async checkdefinition(constraints){
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const track = stream.getVideoTracks()[0];
+        
+        // Step 2: Get the capabilities of the track
+        const capabilities = track.getCapabilities();
+        
+        // Stop the basic stream right away
+        track.stop();
+        
+        // Step 3: Extract the maximum width and height
+        const maxWidth = capabilities.width.max;
+        const maxHeight = capabilities.height.max;
+        // this.maxbrightness = capabilities.brightness.max
+        
+        // console.log(`Max Width: ${maxWidth}, Max Height: ${maxHeight}`);
+        
+        // Return the maximum values
+        return [maxWidth, maxHeight];
+
+      } catch (err) {
+        console.error("Error accessing media devices or getting capabilities: ", err);
+        return null;
+      }
+    },
+
+    async createCamera() {
       const constraints = (window.constraints = {
         audio: false,
         video: {
           facingMode: "environment",
-           "width": {
-             "ideal": 1920 
-           },
-           "height": {
-             "ideal": 1080
-           }
+          focusMode: 'continuous'
         },
+
+        
       });
+      
+      let size = await this.checkdefinition(constraints)
+
+      constraints.video.height = {ideal: size[1]}
+      constraints.video.width = {ideal: size[0]} 
+
+      console.log(constraints)
+
+      
       navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-          this.isaxiosload = false
           this.$refs.camera.srcObject = stream;
+          
         })
         .catch((error) => {
           alert("Error");
         });
+
     },
+
+    // createCamera() {
+    //   this.isaxiosload = true;
+    //   const constraints = (window.constraints = {
+    //     audio: false,
+    //     video: {
+    //       facingMode: "environment",
+    //        "width": {
+    //          "ideal": 1920 
+    //        },
+    //        "height": {
+    //          "ideal": 1080
+    //        }
+    //     },
+    //   });
+    //   navigator.mediaDevices
+    //     .getUserMedia(constraints)
+    //     .then((stream) => {
+    //       this.isaxiosload = false
+    //       this.$refs.camera.srcObject = stream;
+    //     })
+    //     .catch((error) => {
+    //       alert("Error");
+    //     });
+    // },
     stopCameraStream() {
 
       

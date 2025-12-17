@@ -19,5 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 	use App\Http\Controllers\CamController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ScheduleController;
 
+	Route::resource('export', ExportController::class);
+	Route::resource('schedule', ScheduleController::class);
 	Route::resource('camera', CamController::class);
