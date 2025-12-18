@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install gd exif \
+    && docker-php-ext-install zip gd \
     && rm -rf /var/lib/apt/lists/*
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -18,7 +19,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-zip
+RUN composer install --no-dev --optimize-autoloader
 
 # Laravel setup
 RUN php artisan config:clear && \
