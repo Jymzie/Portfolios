@@ -6,9 +6,14 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     libexif-dev \  
     libicu-dev \
-    && docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install gd exif \
-    && docker-php-ext-install zip gd \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        gd \
+        exif \
+        zip \
+        intl \
+        bcmath \
+        opcache \
     && rm -rf /var/lib/apt/lists/*
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
